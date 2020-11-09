@@ -64,7 +64,10 @@
 <p>无条件分支语句容许运行顺序转移到程序的其他部分之中。包括跳跃（在很多语言中称为Goto）、副程序和Procedure等。     </p>
 <h2 id="print"><a href="#print" class="headerlink" title="print"></a>print</h2><p>在python2.x中，print是一个语句，但是在python3.x中它是一个函数了  </p>
 <p>print自带换行，print ,不会换行</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> <span class="string">&quot;hello, world&quot;</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;hello&quot;</span>,</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;world&quot;</span></span><br><span class="line">```    </span><br><span class="line"></span><br><span class="line"><span class="comment">## import</span></span><br><span class="line">用<span class="keyword">import</span>引入模块的方法，是python编程经常用到的。引用方法有如下几种：</span><br><span class="line">```python</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="built_in">print</span> math.<span class="built_in">pow</span>(<span class="number">3</span>,<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> <span class="string">&quot;hello, world&quot;</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;hello&quot;</span>,</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;world&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="import"><a href="#import" class="headerlink" title="import"></a>import</h2><p>用import引入模块的方法，是python编程经常用到的。引用方法有如下几种：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="built_in">print</span> math.<span class="built_in">pow</span>(<span class="number">3</span>,<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
 <p>这是常用的一种方式，而且非常明确，math.pow(3,2)就明确显示了，pow()函数是math模块里的。可以说这是一种可读性非常好的引用方式，并且不同模块的同名函数不会产生冲突。    </p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> <span class="built_in">pow</span></span><br><span class="line"><span class="built_in">print</span> <span class="built_in">pow</span>(<span class="number">3</span>,<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
 <p>这种方法就有点偷懒了，不过也不难理解，从字面意思就知道pow()函数来自于math模块。在后续使用的时候，只需要直接使用pow()即可，不需要在前面写上模块名称了。这种引用方法，比较适合于引入模块较少的时候。如果引入模块多了，可读性就下降了，会不知道那个函数来自那个模块。  </p>
@@ -107,7 +110,7 @@
                 <br>
                 <span class="suffix-box-title">文章出处</span>：<a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-1/" target="_blank">自学Python-语句(1)</a>
                 <br>
-                <span class="suffix-box-title">作者签名</span>：简单地活着, 肆意又精彩.
+                <span class="suffix-box-title">作者签名</span>：解不完的bug、越来越少的头发.
                 <br>
                 <span class="suffix-box-title">关于主题</span>：<a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
                 <br>
@@ -404,7 +407,7 @@
             
                 {
                     icon : 'icon-github', 
-                    url  : 'https://github.com/first19326'
+                    url  : 'https://github.com/carl-5535'
                 },
             
         ],
@@ -527,7 +530,7 @@
         Style : {
             aplayer          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/APlayer.css",
             archive          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/archive.css",
-            donate           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/donate.css",
+            donate           : "",
             fancybox         : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/jquery.fancybox.css",
             footer           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/footer.css",
             iconfont         : "https://at.alicdn.com/t/font_1546312_l3yohatebw.css",
@@ -566,7 +569,7 @@
         },
 
         Suffix : {
-            about : '简单地活着, 肆意又精彩.'
+            about : '解不完的bug、越来越少的头发.'
         },
             
         Theme : {
