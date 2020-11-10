@@ -61,6 +61,7 @@
         <h1 id="集合-set"><a href="#集合-set" class="headerlink" title="集合(set)"></a>集合(set)</h1><h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>在之前学习的数据类型中：    </p>
 <p>能够索引的，如list/str，其中的元素可以重复<br>可变的，如list/dict，即其中的元素/键值对可以原地修改<br>不可变的，如str/int，即不能进行原地修改<br>无索引序列的，如dict，即其中的元素（键值对）没有排列顺序    </p>
 <p>现在要介绍另外一种类型的数据，英文是set，翻译过来叫做“集合”。它的特点是：有的可变，有的不可变；元素无次序，不可重复。   </p>
+<hr>
 <h2 id="创建set"><a href="#创建set" class="headerlink" title="创建set"></a>创建set</h2><p>set是无序的，不可重复，可以原处修改的数据类型</p>
 <h3 id="使用set创建"><a href="#使用set创建" class="headerlink" title="使用set创建"></a>使用set创建</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set1 = <span class="built_in">set</span>(<span class="string">&quot;carll&quot;</span>)</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;set1 is &quot;</span> + <span class="built_in">str</span>(set1)</span><br></pre></td></tr></table></figure>
 <p>通过set创建，’l’只有一个，并且元素顺序被打乱  </p>
@@ -71,6 +72,7 @@
 <h3 id="集合和列表装换"><a href="#集合和列表装换" class="headerlink" title="集合和列表装换"></a>集合和列表装换</h3><p>list() 和 set() 可以实现两种数据互相转换    </p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">alis = <span class="built_in">list</span>(set1)</span><br><span class="line">alis.append(<span class="string">&quot;l&quot;</span>)</span><br><span class="line"><span class="built_in">print</span> alis</span><br><span class="line">set3 = <span class="built_in">set</span>(alis)</span><br><span class="line"><span class="built_in">print</span> set3</span><br></pre></td></tr></table></figure>
 <p>可以发现，转换成集合以后，就没有重复的元素了</p>
+<hr>
 <h2 id="集合的方法"><a href="#集合的方法" class="headerlink" title="集合的方法"></a>集合的方法</h2><h3 id="增加-add、uodate"><a href="#增加-add、uodate" class="headerlink" title="增加(add、uodate)"></a>增加(add、uodate)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">set3.add(<span class="string">&quot;hello&quot;</span>)  <span class="comment">#增加一个元素，原处修改</span></span><br><span class="line"><span class="built_in">print</span> set3</span><br><span class="line">set3.update(set2)   <span class="comment">#将set2合并到set3中</span></span><br><span class="line"><span class="built_in">print</span> set3</span><br></pre></td></tr></table></figure>
 <p>add添加一个元素<br>update合并一个集合  </p>
 <h3 id="删除-pop、remove、discard"><a href="#删除-pop、remove、discard" class="headerlink" title="删除(pop、remove、discard)"></a>删除(pop、remove、discard)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> set3.pop()</span><br><span class="line"><span class="built_in">print</span> set3.remove(<span class="string">&quot;hello&quot;</span>)</span><br><span class="line"><span class="built_in">print</span> set3</span><br><span class="line"><span class="built_in">print</span> set3.discard(<span class="string">&quot;world&quot;</span>)</span><br><span class="line"><span class="built_in">print</span> set3</span><br></pre></td></tr></table></figure>
@@ -79,6 +81,7 @@
 <p>discard,返回None证明discard无返回，如果元素存在就删除，如果不在就什么也不做    </p>
 <h3 id="清空-clear"><a href="#清空-clear" class="headerlink" title="清空(clear)"></a>清空(clear)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set3.clear()</span><br><span class="line"><span class="built_in">print</span> set3</span><br></pre></td></tr></table></figure>
 <p>clear,清空集合  </p>
+<hr>
 <h2 id="集合运算"><a href="#集合运算" class="headerlink" title="集合运算"></a>集合运算</h2><h3 id="判断元素是否属于集合-in"><a href="#判断元素是否属于集合-in" class="headerlink" title="判断元素是否属于集合(in)"></a>判断元素是否属于集合(in)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> <span class="string">&quot;c in fset?\t&quot;</span> + <span class="built_in">str</span>(<span class="string">&quot;c&quot;</span> <span class="keyword">in</span> fset)</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;d in fset?\t&quot;</span> + <span class="built_in">str</span>(<span class="string">&quot;d&quot;</span> <span class="keyword">in</span> fset)</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line"><span class="comment">### 判断是否为子集或超集(&lt;、issubset;&gt;、issuperset)</span></span><br><span class="line">```python</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;set3 是 fset的子集?\t&quot;</span> + <span class="built_in">str</span>(set3 &lt; fset)</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;set3 是 fset的子集?\t&quot;</span> + <span class="built_in">str</span>(set3.issubset(fset))</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;set3 是 fset的超集?\t&quot;</span> + <span class="built_in">str</span>(set3 &gt; fset)</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;set3 是 fset的超集?\t&quot;</span> + <span class="built_in">str</span>(set3.issuperset(fset))</span><br><span class="line">```     </span><br><span class="line"></span><br><span class="line"><span class="comment">### 判断集合元素是否一样(==、!=)</span></span><br><span class="line">```python</span><br><span class="line">set3.add(<span class="string">&quot;a&quot;</span>)</span><br><span class="line">set3.add(<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;set3 == fset?\t&quot;</span> + <span class="built_in">str</span>(set3 == fset)</span><br><span class="line">set3.add(<span class="string">&quot;l&quot;</span>)</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;set3 != fset?\t&quot;</span> + <span class="built_in">str</span>(set3 != fset)</span><br><span class="line">```    </span><br><span class="line"></span><br><span class="line"><span class="comment">### 两集合的并集(|、union)</span></span><br><span class="line">```python</span><br><span class="line">set4 = set3 | set2</span><br><span class="line"><span class="built_in">print</span> set4</span><br><span class="line">set4.clear()</span><br><span class="line">set4 = set3.union(set1)</span><br><span class="line"><span class="built_in">print</span> set4</span><br></pre></td></tr></table></figure>
 
 <h3 id="两集合的交集-amp-、intersection"><a href="#两集合的交集-amp-、intersection" class="headerlink" title="两集合的交集(&amp;、intersection)"></a>两集合的交集(&amp;、intersection)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> set4 &amp; set3</span><br><span class="line"><span class="built_in">print</span> set4.intersection(set3)</span><br></pre></td></tr></table></figure>
@@ -91,14 +94,14 @@
         <p class="suffix-end">__END__</p>
         <div class="suffix-box">
             <div class="suffix-box-left">
-                <img src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/sidebar/avatar.jpg" alt="Carl Chen">
+                <img src="./image/carl.jpg" alt="Carl Chen">
             </div>
             <div class="suffix-box-right">
                 <span class="suffix-box-title">文章作者</span>：Carl Chen
                 <br>
                 <span class="suffix-box-title">文章出处</span>：<a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-3/" target="_blank">自学Python-基本数据结构(3)</a>
                 <br>
-                <span class="suffix-box-title">作者签名</span>：解不完的bug、越来越少的头发.
+                <span class="suffix-box-title">作者签名</span>：不秃头的Carl.
                 <br>
                 <span class="suffix-box-title">关于主题</span>：<a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
                 <br>
@@ -115,6 +118,8 @@
                 标签：
                 
                     <a href="/tags/python/">python</a>
+                
+                    <a href="/tags/%E8%87%AA%E5%AD%A6python/">自学python</a>
                 
             </div>
         
@@ -204,8 +209,8 @@
         GitHubRepositories : 'Hexo-LiveForCode',
 
         BlogUser      : 'Carl Chen',
-        BlogAvatar    : 'https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/sidebar/avatar.jpg',
-        BlogStartDate : '2020-11-07',
+        BlogAvatar    : './image/carl.jpg',
+        BlogStartDate : '2020-11-08',
 
         WebsiteTitleBlur         : '(◍´꒳`◍) Hi, Live For Code',
         WebsiteTitleBlurTimeOut  : 500,
@@ -521,7 +526,7 @@
         Style : {
             aplayer          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/APlayer.css",
             archive          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/archive.css",
-            donate           : "",
+            donate           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/donate.css",
             fancybox         : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/jquery.fancybox.css",
             footer           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/footer.css",
             iconfont         : "https://at.alicdn.com/t/font_1546312_l3yohatebw.css",
@@ -560,7 +565,7 @@
         },
 
         Suffix : {
-            about : '解不完的bug、越来越少的头发.'
+            about : '不秃头的Carl.'
         },
             
         Theme : {

@@ -62,10 +62,11 @@
 <p>循环语句:容许一些语句反复运行数次。循环可依据一个默认的数目来决定运行这些语句的次数；或反复运行它们，直至某些条件改变。 </p>
 <p>条件语句:容许仅当某些条件成立时才运行某个区块。否则，这个区块中的语句会略去，然后按区块后的语句继续运行。   </p>
 <p>无条件分支语句容许运行顺序转移到程序的其他部分之中。包括跳跃（在很多语言中称为Goto）、副程序和Procedure等。     </p>
+<hr>
 <h2 id="print"><a href="#print" class="headerlink" title="print"></a>print</h2><p>在python2.x中，print是一个语句，但是在python3.x中它是一个函数了  </p>
 <p>print自带换行，print ,不会换行</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> <span class="string">&quot;hello, world&quot;</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;hello&quot;</span>,</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;world&quot;</span></span><br></pre></td></tr></table></figure>
-
+<hr>
 <h2 id="import"><a href="#import" class="headerlink" title="import"></a>import</h2><p>用import引入模块的方法，是python编程经常用到的。引用方法有如下几种：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="built_in">print</span> math.<span class="built_in">pow</span>(<span class="number">3</span>,<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
 <p>这是常用的一种方式，而且非常明确，math.pow(3,2)就明确显示了，pow()函数是math模块里的。可以说这是一种可读性非常好的引用方式，并且不同模块的同名函数不会产生冲突。    </p>
@@ -79,6 +80,7 @@
 <p>也可以一次全部引入</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure>
 <p>这样会使代码的可读性变得更低，仅适用于模块中函数较少，重复调用频繁的情况</p>
+<hr>
 <h2 id="赋值语句"><a href="#赋值语句" class="headerlink" title="赋值语句"></a>赋值语句</h2><p>除了 a = 1 这种简单的赋值语句还有</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x, y, z = <span class="number">1</span>, <span class="string">&quot;python&quot;</span>, [<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;world&quot;</span>]</span><br><span class="line"><span class="built_in">print</span> x</span><br><span class="line"><span class="built_in">print</span> y</span><br><span class="line"><span class="built_in">print</span> z</span><br></pre></td></tr></table></figure>
 
@@ -103,14 +105,14 @@
         <p class="suffix-end">__END__</p>
         <div class="suffix-box">
             <div class="suffix-box-left">
-                <img src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/sidebar/avatar.jpg" alt="Carl Chen">
+                <img src="./image/carl.jpg" alt="Carl Chen">
             </div>
             <div class="suffix-box-right">
                 <span class="suffix-box-title">文章作者</span>：Carl Chen
                 <br>
                 <span class="suffix-box-title">文章出处</span>：<a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-1/" target="_blank">自学Python-语句(1)</a>
                 <br>
-                <span class="suffix-box-title">作者签名</span>：解不完的bug、越来越少的头发.
+                <span class="suffix-box-title">作者签名</span>：不秃头的Carl.
                 <br>
                 <span class="suffix-box-title">关于主题</span>：<a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
                 <br>
@@ -128,9 +130,14 @@
                 
                     <a href="/tags/python/">python</a>
                 
+                    <a href="/tags/%E8%87%AA%E5%AD%A6python/">自学python</a>
+                
             </div>
         
         <div class="article-prev-next">
+            
+                <a href="/2020/11/10/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-2/" class="prev-prefix">« </a> 上一篇：    <a href="/2020/11/10/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-2/" title="发布于 2020-11-10 09:33">自学Python-语句(2)</a>
+                <br>
             
             
                 <a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-3/" class="next-prefix">» </a> 下一篇：    <a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-3/" title="发布于 2020-11-09 07:42">自学Python-基本数据结构(3)</a>
@@ -213,8 +220,8 @@
         GitHubRepositories : 'Hexo-LiveForCode',
 
         BlogUser      : 'Carl Chen',
-        BlogAvatar    : 'https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/sidebar/avatar.jpg',
-        BlogStartDate : '2020-11-07',
+        BlogAvatar    : './image/carl.jpg',
+        BlogStartDate : '2020-11-08',
 
         WebsiteTitleBlur         : '(◍´꒳`◍) Hi, Live For Code',
         WebsiteTitleBlurTimeOut  : 500,
@@ -530,7 +537,7 @@
         Style : {
             aplayer          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/APlayer.css",
             archive          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/archive.css",
-            donate           : "",
+            donate           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/donate.css",
             fancybox         : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/jquery.fancybox.css",
             footer           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/footer.css",
             iconfont         : "https://at.alicdn.com/t/font_1546312_l3yohatebw.css",
@@ -569,7 +576,7 @@
         },
 
         Suffix : {
-            about : '解不完的bug、越来越少的头发.'
+            about : '不秃头的Carl.'
         },
             
         Theme : {

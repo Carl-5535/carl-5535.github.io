@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta name="referrer" content="origin">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>自学Python-语句(3)</title>
+
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/LongCang.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Monda.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/NotoSansSC.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Playball.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/PTMono.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/RobotoSlab.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Rosario.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/UbuntuMono.css">
+
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/post.css">
+    
+        <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/normal.css">
+    
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/jquery-3.4.1.min.js"></script>
+
+<meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Carl������վ" type="application/atom+xml">
+</head>
+<body>
+    <a id="cover"></a>
+    <div id="header">
+    <div class="header">
+        <div class="vertical">
+            <div class="inner">
+                <h1 class="header-subtitle">自学Python-语句(3)</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2020-11-10
+                        </span>
+                        
+                            <span id="/2020/11/10/自学Python-语句-3/" class="leancloud_visitors" data-flag-title="自学Python-语句(3)">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/10/自学Python-语句-3/"></span>
+                        </span>  
+                    </p>                 
+                </div>
+            </div>
+        </div>
+        <canvas id="articleHeaderCanvas"></canvas>
+    </div>
+</div>
+    <div id="container">
+    <div id="content">
+        <div id="article">
+    <div class="toc"></div>
+    <div class="article-body">
+        <h1 id="循环语句"><a href="#循环语句" class="headerlink" title="循环语句"></a>循环语句</h1><h2 id="简单的for循环"><a href="#简单的for循环" class="headerlink" title="简单的for循环"></a>简单的for循环</h2><p>for循环的语法和if差不多，条件需要冒号，语句块需要四个空格的缩进：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">hello = <span class="string">&quot;world&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> hello:</span><br><span class="line">    <span class="built_in">print</span> i,   <span class="comment">#输出：w o r l d</span></span><br><span class="line">``` </span><br><span class="line">这个<span class="keyword">for</span>循环是怎么工作的呢？</span><br><span class="line"><span class="number">1.</span> hello这个变量引用的是<span class="string">&quot;world&quot;</span>这个<span class="built_in">str</span>类型的数据</span><br><span class="line"><span class="number">2.</span> 变量 i 通过hello找到它所引用的对象<span class="string">&quot;world&quot;</span>,因为<span class="built_in">str</span>类型的数据属于序列类型，能够进行索引，于是就按照索引顺序，从第一字符开始，依次获得该字符的引用。</span><br><span class="line"><span class="number">3.</span> 当 i=<span class="string">&quot;w&quot;</span>的时候，执行<span class="built_in">print</span> i，打印出了字母w，结束之后循环第二次，让 i=<span class="string">&quot;e&quot;</span>，然后执行<span class="built_in">print</span> i,打印出字母e，如此循环下去，一直到最后一个字符被打印出来，循环自动结束。  </span><br><span class="line"></span><br><span class="line">因为可以也通过使用索引（偏移量），得到序列对象的某个元素。所以，还可以通过下面的循环方式实现同样效果：</span><br><span class="line">```python</span><br><span class="line">hello = <span class="string">&quot;world&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(a)):</span><br><span class="line">    <span class="built_in">print</span> a[i],   <span class="comment">#输出：w o r l d</span></span><br></pre></td></tr></table></figure>
+<p>其工作方式是：</p>
+<ol>
+<li>len(a)得到hello引用的字符串的长度，为5</li>
+<li>range(len(hello),就是range(5),也就是[0, 1, 2, 3, 4],对应这”world”每个字母索引，也可以称之为偏移量。这里应用了一个新的函数range()，关于它的用法，继续阅读，就能看到了。</li>
+<li>for i in range(len(hello)),就相当于for i in [0,1,2,3,4],让i依次等于list中的各个值。当i=0时，打印hello[0]，也就是第一个字符。然后顺序循环下去，直到最后一个i=4为止。</li>
+</ol>
+<ul>
+<li>这种语法由于我也第一次接触，所以直接用的 《零基础自学python》的原文</li>
+</ul>
+<hr>
+<h2 id="while"><a href="#while" class="headerlink" title="while"></a>while</h2><p>while比较简单就不多说了，可以通过下面的例子来了解</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line">number = random.randint(<span class="number">1</span>,<span class="number">101</span>)</span><br><span class="line"></span><br><span class="line">guess = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line"></span><br><span class="line">    num_input = raw_input(<span class="string">&quot;please input one integer that is in 1 to 100:&quot;</span>)</span><br><span class="line">    guess += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> num_input.isdigit():</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;Please input interger.&quot;</span></span><br><span class="line">    <span class="keyword">elif</span> <span class="built_in">int</span>(num_input) &lt; <span class="number">0</span> <span class="keyword">or</span> <span class="built_in">int</span>(num_input) &gt;= <span class="number">100</span>:</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;The number should be in 1 to 100.&quot;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> number == <span class="built_in">int</span>(num_input):</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;OK, you are good.It is only %d, then you successed.&quot;</span> % guess</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">elif</span> number &gt; <span class="built_in">int</span>(num_input):</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;your number is more less.&quot;</span></span><br><span class="line">        <span class="keyword">elif</span> number &lt; <span class="built_in">int</span>(num_input):</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;your number is bigger.&quot;</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;There is something bad, I will not work&quot;</span></span><br></pre></td></tr></table></figure>
+<p>这个例子是直接抄的原文的，通过这个例子应该对while有了大概的了解：</p>
+<ul>
+<li>只要条件成立就一直运行。</li>
+<li>遇到break，就直接跳出循环。</li>
+<li>遇到continue,就从头开始执行。</li>
+</ul>
+<hr>
+<h2 id="内建函数range-start-stop-step"><a href="#内建函数range-start-stop-step" class="headerlink" title="内建函数range(start,stop[, step])"></a>内建函数range(start,stop[, step])</h2><p>一般形式是range(start, stop[, step])  </p>
+<p>关于range()函数有以下主要注意的地方：</p>
+<ol>
+<li>这个函数可以创建一个数字元素组成的列表。</li>
+<li>这个函数最常用于for循环。</li>
+<li>函数的参数必须是整数，默认从0开始。返回值是类似[start, start + step, start + 2*step, …]的列表。</li>
+<li>step默认值是1。如果不写，就是按照此值。</li>
+<li>如果step是正数，返回list的最最后的值不包含stop值，即start+istep这个值小于stop；如果step是负数，start+istep的值大于stop。</li>
+<li>step不能等于零，如果等于零，就报错。</li>
+</ol>
+<p>参数的含义：</p>
+<ul>
+<li>start：开始数值，默认为0,也就是如果不写这项，就是认为start=0</li>
+<li>stop：结束的数值，必须要写的。</li>
+<li>step：变化的步长，默认是1,也就是不写，就是认为步长为1。坚决不能为0</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> <span class="built_in">range</span>(<span class="number">9</span>)</span><br><span class="line"><span class="built_in">print</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">9</span>)</span><br><span class="line"><span class="built_in">print</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">9</span>,<span class="number">1</span>)  <span class="comment">#前三个输出一样含义一样</span></span><br><span class="line"><span class="built_in">print</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">9</span>,<span class="number">1</span>)  <span class="comment">#开始数值从1开始</span></span><br><span class="line"><span class="built_in">print</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">9</span>,<span class="number">2</span>)  <span class="comment">#步长为2，也就是输出0,2,4,6,8</span></span><br></pre></td></tr></table></figure>
+<p>如果结束值是负值，那么步进也需要是负值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">-9</span>,<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
+<p>掌握了range()函数以后,我们可以写一个例程：</p>
+<ul>
+<li>求100以内能被3整除的正整数<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#以第一个能被3整除的数开始，步进为3就可以很快的得到</span></span><br><span class="line"><span class="built_in">range</span>(<span class="number">3</span>,<span class="number">100</span>,<span class="number">3</span>) </span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="能够用来for的对象"><a href="#能够用来for的对象" class="headerlink" title="能够用来for的对象"></a>能够用来for的对象</h2><p>所有的序列类型对象，都能够用for来循环。比如</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">name_str = <span class="string">&quot;carl&quot;</span>   <span class="comment">#str</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> name_str:</span><br><span class="line">    <span class="built_in">print</span> i,</span><br><span class="line"></span><br><span class="line">name_list = <span class="built_in">list</span>(name_str)  <span class="comment">#list</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> name_list:</span><br><span class="line">    <span class="built_in">print</span> i,</span><br><span class="line"></span><br><span class="line">name_set = <span class="built_in">set</span>(name_str)    <span class="comment">#set</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> name_set:</span><br><span class="line">    <span class="built_in">print</span> i,</span><br><span class="line"></span><br><span class="line">name_tuple = <span class="built_in">tuple</span>(name_str)    <span class="comment">#tuple</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> name_tuple:</span><br><span class="line">    <span class="built_in">print</span> i,</span><br><span class="line"></span><br><span class="line">name_dic = &#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;carl&quot;</span>,<span class="string">&quot;age&quot;</span>:<span class="number">22</span>&#125; <span class="comment">#dict</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> name_str:</span><br><span class="line">    <span class="built_in">print</span> i,name_dic[i],</span><br></pre></td></tr></table></figure>
+<ul>
+<li>值得注意的是字典获取的是key的值</li>
+</ul>
+<hr>
+<h2 id="并行迭代"><a href="#并行迭代" class="headerlink" title="并行迭代"></a>并行迭代</h2><p>计算两个列表a = [1,2,3,4,5], b = [9,8,7,6,5]的和，这就是并行迭代  </p>
+<p>我们可以这么做：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">b = [<span class="number">9</span>,<span class="number">8</span>,<span class="number">7</span>,<span class="number">6</span>,<span class="number">5</span>]</span><br><span class="line">c = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(a)):</span><br><span class="line">    c.append(a[i] + b[i])</span><br><span class="line"><span class="built_in">print</span> c</span><br></pre></td></tr></table></figure>
+<p>python有更好的方法实现这一功能，这就是zip()函数</p>
+<hr>
+<h2 id="zip"><a href="#zip" class="headerlink" title="zip()"></a>zip()</h2><p>函数原型是:</p>
+<ul>
+<li>zip(seq1 [, seq2 […]])  </li>
+</ul>
+<p>seq1, seq2分别代表了序列类型的数据,我们可以试一下这个函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="string">&quot;carl&quot;</span></span><br><span class="line">b = <span class="string">&quot;name&quot;</span></span><br><span class="line"><span class="built_in">print</span> <span class="built_in">zip</span>(a,b)</span><br><span class="line"><span class="comment">#输出：[(&#x27;c&#x27;, &#x27;n&#x27;), (&#x27;a&#x27;, &#x27;a&#x27;), (&#x27;r&#x27;, &#x27;m&#x27;), (&#x27;l&#x27;, &#x27;e&#x27;)]</span></span><br></pre></td></tr></table></figure>
+<p>如果两个序列长度不同则以最短的为准</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">b = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="built_in">print</span> <span class="built_in">zip</span>(a,b)</span><br><span class="line"><span class="comment">#输出：[(1, 1), (2, 2), (3, 3)]</span></span><br></pre></td></tr></table></figure>
+<p>如果参数只有一个序列是会是以下的样子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line"><span class="built_in">print</span> <span class="built_in">zip</span>(a)</span><br><span class="line"><span class="comment">#输出：[(1,), (2,), (3,), (4,), (5,)]</span></span><br></pre></td></tr></table></figure>
+<p>让我们用zip()来解决最开始的问题</p>
+<ul>
+<li>计算两个列表a = [1,2,3,4,5], b = [9,8,7,6,5]的和<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">b = [<span class="number">9</span>,<span class="number">8</span>,<span class="number">7</span>,<span class="number">6</span>,<span class="number">5</span>]</span><br><span class="line">c = []</span><br><span class="line"><span class="keyword">for</span> x,y <span class="keyword">in</span> <span class="built_in">zip</span>(a,b):</span><br><span class="line">    c.append(x+y)</span><br><span class="line"><span class="built_in">print</span> c</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="list解析"><a href="#list解析" class="headerlink" title="list解析"></a>list解析</h2><p>先看下面的例子，这个例子是想得到1到9的每个整数的平方，并且将结果放在list中打印出来</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">10</span>):</span><br><span class="line">    a.append(i*i)</span><br><span class="line"><span class="built_in">print</span> a</span><br></pre></td></tr></table></figure>
+<p>python其实还可以这么做</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = [i**<span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">10</span>)]</span><br><span class="line"><span class="built_in">print</span> a</span><br></pre></td></tr></table></figure>
+<p>在高级一点去除列表中字符串的前后空格</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mybag = [<span class="string">&#x27; glass&#x27;</span>,<span class="string">&#x27; apple&#x27;</span>,<span class="string">&#x27;green leaf &#x27;</span>]</span><br><span class="line">mybag = [i.strip() <span class="keyword">for</span> i <span class="keyword">in</span> mybag]</span><br><span class="line"><span class="built_in">print</span> mybag</span><br></pre></td></tr></table></figure>
+        <p class="suffix-end">__END__</p>
+        <div class="suffix-box">
+            <div class="suffix-box-left">
+                <img src="./image/carl.jpg" alt="Carl Chen">
+            </div>
+            <div class="suffix-box-right">
+                <span class="suffix-box-title">文章作者</span>：Carl Chen
+                <br>
+                <span class="suffix-box-title">文章出处</span>：<a href="/2020/11/10/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-3/" target="_blank">自学Python-语句(3)</a>
+                <br>
+                <span class="suffix-box-title">作者签名</span>：不秃头的Carl.
+                <br>
+                <span class="suffix-box-title">关于主题</span>：<a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+                <br>
+                <span class="suffix-box-title">版权声明</span>：文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+                <br>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+    <div class="article-footer">
+        
+        
+            <div class="tag">
+                标签：
+                
+                    <a href="/tags/python/">python</a>
+                
+                    <a href="/tags/%E8%87%AA%E5%AD%A6python/">自学python</a>
+                
+            </div>
+        
+        <div class="article-prev-next">
+            
+                <a href="/2020/11/10/%E8%87%AA%E5%AD%A6Python-%E6%96%87%E4%BB%B6/" class="prev-prefix">« </a> 上一篇：    <a href="/2020/11/10/%E8%87%AA%E5%AD%A6Python-%E6%96%87%E4%BB%B6/" title="发布于 2020-11-10 09:38">自学Python-文件</a>
+                <br>
+            
+            
+                <a href="/2020/11/10/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-2/" class="next-prefix">» </a> 下一篇：    <a href="/2020/11/10/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-2/" title="发布于 2020-11-10 09:33">自学Python-语句(2)</a>
+            
+        </div>
+    </div>
+    
+    <div class="article-comments">
+        <div class="comments-title">
+            评论列表
+        </div>
+        <div class="comments-content">
+        </div>
+    </div>
+
+</div>
+
+    </div>
+</div>
+    <div id="footer"></div>
+    <div id="sidebar">
+    <div class="menu-wrap" style="display:none;">
+        <nav class="menu">
+            <div class="menu-introduce"> 
+                <div class="introduce-avatar"></div> 
+                <div class="introduce-info"> 
+                    <div class="introduce-user"><span></span></div>        
+                </div> 
+            </div> 
+            <div class="menu-list">
+                <ul></ul> 
+            </div> 
+            <div class="menu-link"></div> 
+        </nav>
+        <button class="menu-button-close"></button>
+        <div class="morph-shape" id="morph-shape" data-morph-open="M-7.312,0H15c0,0,66,113.339,66,399.5C81,664.006,15,800,15,800H-7.312V0z;M-7.312,0H100c0,0,0,113.839,0,400c0,264.506,0,400,0,400H-7.312V0z">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 800" preserveAspectRatio="none">
+                <path d="M-7.312,0H0c0,0,0,113.839,0,400c0,264.506,0,400,0,400h-7.312V0z"/>
+            </svg>
+        </div>
+    </div>
+    <button class="menu-button-open">MENU</button>
+    <div class="menu-cover"></div>
+</div>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/search.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/iscroll.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/instantsearch.min.js"></script>
+<div class="search-window">
+    <div class="search-content">
+        <div class="search-content-icon">
+            <i class="iconfont icon-search"></i>
+        </div>
+        <div id="search-input" class="search-input"></div>
+    </div>
+
+    <div class="search-scroll">
+        <div class="search-result">
+            <div id="search-stats" class="search-stats"></div>
+            <div id="search-hits"></div>
+            <div id="search-pagination" class="search-pagination"></div>
+        </div>
+    </div>
+
+    <span class="search-close-icon">
+        <i class="iconfont icon-close"></i>
+    </span>
+</div>
+    <div id="tools">
+    <div class="progressbar-top"></div>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/APlayer.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/APlayer.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/Meting.min.js"></script>
+    <meting-js id="3778678" lrcshow="false" server="netease" type="playlist" fixed="true" autoplay="false" loop="all" order="random" preload="auto" volume="0.67" mutex="true"></meting-js>
+    <div class="wrap-right"></div>
+    <div class="loading"></div>
+</div>
+    <script>
+    window.config = {
+        GitHubUserName     : 'first19326',
+        GitHubRepositories : 'Hexo-LiveForCode',
+
+        BlogUser      : 'Carl Chen',
+        BlogAvatar    : './image/carl.jpg',
+        BlogStartDate : '2020-11-08',
+
+        WebsiteTitleBlur         : '(◍´꒳`◍) Hi, Live For Code',
+        WebsiteTitleBlurTimeOut  : 500,
+        WebsiteTitleFocus        : '(*´∇｀*) 欢迎回来!',
+        WebsiteTitleFocusTimeOut : 1000,
+        WebsiteFavicon           : 'https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/website/logo.png',
+
+        ProgressBar: {
+            id       : 'topProgressBar',
+            color    : '#77B6FF',
+            height   : '2px',
+            duration : 0.2
+        },
+
+        Loading: {
+            rebound: {
+                tension  : 16,
+                friction : 5
+            },
+            spinner: {
+                id     : 'spinner',
+                radius : 90,
+                sides  : 3,
+                depth  : 4,
+                colors : {
+                    background : '#F0F0F0',
+                    stroke     : '#272633',
+                    base       : '',
+                    child      : '#272633'
+                },
+                alwaysForward : true,
+                restAt        : 0.5,
+                renderBase    : false
+            }
+        },
+
+        HomeHeaderAnimationRendered : true,
+        HomeHeaderAnimation         : {
+            radius      : 15,
+            density     : 0.2,
+            color       : 'rgba(255, 255, 255, .2)',
+            clearOffset : 0.3
+        },
+
+        ArticleHeaderAnimationRendered : false,
+        ArticleHeaderAnimation         : {
+            triW                  : 14,
+            triH                  : 20,
+            neighbours            : [
+                
+                    'side',
+                
+                    'top',
+                
+                    'bottom',
+                
+            ],
+            speedTrailAppear      : 0.1,
+            speedTrailDisappear   : 0.1,
+            speedTriOpen          : 1,
+            trailMaxLength        : 30,
+            trailIntervalCreation : 100,
+            delayBeforeDisappear  : 2,
+            colors                : [
+                
+                    '#96EDA6',
+                
+                    '#5BC6A9',
+                
+                    '#38668C',
+                
+                    '#374D84',
+                
+                    '#BED5CB',
+                
+                    '#62ADC6',
+                
+                    '#8EE5DE',
+                
+                    '#304E7B',
+                
+            ]
+        },
+
+        BackAnimationRendered          : true,
+        IEBrowserBackAnimationRendered : false,
+        BackAnimation                  : {
+            colorSaturation  : '60%',
+            colorBrightness  : '50%',
+            colorAlpha       : 0.5,
+            colorCycleSpeed  : 5,
+            verticalPosition : 'random',
+            horizontalSpeed  : 200,
+            ribbonCount      : 3,
+            strokeSize       : 0,
+            parallaxAmount   : -0.2,
+            animateSections  : true
+        },
+
+        HomeHeaderImage : [
+            
+                'https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/header/home.jpg',
+            
+        ],
+        HomeBannerText  : '代码大部分时间是给人看的，只是偶尔运行一下',
+
+        ArticleHeaderImage : [
+            
+                'https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/header/article.jpg',
+            
+        ],
+
+        OtherBannerText  : '',
+
+        MenuList : [
+            
+                {
+                    name   : '首页',
+                    href   : '/',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '标签',
+                    href   : '/tag',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '分类',
+                    href   : '/category',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '归档',
+                    href   : '/archive',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '关于',
+                    href   : '/about',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '搜索',
+                    href   : '',    
+                    target : '',
+                    class  : 'search'
+                },
+            
+                {
+                    name   : '留言板',
+                    href   : '/comment',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '友情链接',
+                    href   : '/friend',    
+                    target : '',
+                    class  : ''
+                },
+            
+        ],
+        MenuLink : [
+            
+                {
+                    icon : 'icon-weibo', 
+                    url  : ''
+                },
+            
+                {
+                    icon : 'icon-wechat', 
+                    url  : ''
+                },
+            
+                {
+                    icon : 'icon-qq', 
+                    url  : ''
+                },
+            
+                {
+                    icon : 'icon-github', 
+                    url  : 'https://github.com/carl-5535'
+                },
+            
+        ],
+
+        FooterStyle : 2,
+        BottomText  : {
+            icon    : 'like-fill',
+            left    : '人生若只如初见',
+            right   : '何事秋风悲画扇'
+        },
+        ThemeInfo   : true,
+
+        ConsoleList : [
+            
+                [
+                    
+                        'Based on cnblogs theme SimpleMemory.',
+                    
+                        '',
+                    
+                ],
+            
+                [
+                    
+                        'SimpleMemory Author:',
+                    
+                        'BNDong',
+                    
+                ],
+            
+                [
+                    
+                        'Theme:',
+                    
+                        'LiveForCode',
+                    
+                ],
+            
+        ],
+
+        FontIconExtend : "",
+
+        Donate : {
+            paypal  : '',
+            bitcoin : '',
+            alipay  : 'https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/donate/alipay.png',
+            wechat  : 'https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/donate/wechat.png'
+        },
+
+        Code : {
+            style : 'normal'
+        },  
+
+        Search : {
+            applicationID : 'XMCRUTQ6TF',
+            apiKey        : 'd163ebeca12b61ad7721462381cea6a9',
+            indexName     : 'BLOG',
+            hits          : {
+                page : 10
+            },
+            labels        : {
+                placeholder : '搜索',
+                empty       : '未发现与 「${query}」 相关的内容',
+                stats       : '${hits} 条相关条目，使用了 ${time} 毫秒',
+            }
+        }, 
+
+        Valine : {
+            switch         : true,
+            el             : '.comments-content',
+            appId          : 'OVvCeGMH5XNm42b1wuU52HK0-gzGzoHsz',
+            appKey         : 'TltgUJqHRaoztnKrsy4SeYTW',
+            placeholder    : '你是我一生只会遇见一次的惊喜...',
+            avatar         : 'mm',
+            meta           : 'nick,mail,link',
+            requiredFields : 'nick,mail',
+            pageSize       : 5,
+            lang           : 'zh-cn',
+            visitor        : true,
+            enableQQ       : true
+        },
+
+        Tocbot : {
+            switch                : true,
+            tocSelector           : '.toc',
+            contentSelector       : '.article-body',
+            headingSelector       : 'h1, h2, h3, h4, h5',
+            headingsOffset        : 0,
+            scrollSmooth          : true,
+            scrollSmoothOffset    : -5,
+            positionFixedSelector : '.toc',
+            positionFixedClass    : 'toc-fixed',
+            fixedSidebarOffset    : '',
+        },
+
+        Require : {
+            baseUrl     : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/",
+            waitSeconds : 100
+        },
+
+        Meting : {
+            id       : "3778678", 
+            lrcshow  : false, 
+            server   : "netease", 
+            type     : "playlist", 
+            fixed    : true, 
+            autoplay : false, 
+            loop     : "all", 
+            order    : "random", 
+            preload  : "auto", 
+            volume   : 0.67, 
+            mutex    : true
+        },
+
+        LazyLoad : {
+            default : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/website/lazyload.svg"
+        },
+  
+
+        Style : {
+            aplayer          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/APlayer.css",
+            archive          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/archive.css",
+            donate           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/donate.css",
+            fancybox         : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/jquery.fancybox.css",
+            footer           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/footer.css",
+            iconfont         : "https://at.alicdn.com/t/font_1546312_l3yohatebw.css",
+            index            : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/index.css",
+            menuBubble       : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/menu-bubble.css",
+            page             : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/page.css",
+            post             : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/post.css",
+            search           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/search.css",
+            tocbot           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/tocbot.css",
+            normal           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/normal.css",
+            night            : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/night.css",
+            clipboard        : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/clipboard.css"
+        },
+
+        Script: {
+            aplayer          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/APlayer.min.js",
+            config           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/require.config.js",
+            index            : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/index.js",
+            instantSearch    : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/instantsearch.min.js",
+            jQuery           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/jquery-3.4.1.min.js",
+            loading          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/loading.js",
+            meting           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/Meting.min.js",
+            iscroll          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/iscroll.js",
+            require          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/require.min.js"
+        },
+
+        Font: {
+            LongCang   : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/LongCang.css",
+            Monda      : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Monda.css",
+            NotoSansSC : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/NotoSansSC.css",
+            Playball   : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Playball.css",
+            PTMono     : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/PTMono.css",
+            RobotoSlab : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/RobotoSlab.css",
+            Rosario    : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Rosario.css",
+            UbuntuMono : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/UbuntuMono.css"
+        },
+
+        Suffix : {
+            about : '不秃头的Carl.'
+        },
+            
+        Theme : {
+            url  : 'https://github.com/first19326/Hexo-LiveForCode',
+            name : 'Hexo - Live For Code'
+        }  
+    };
+</script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/index.js"></script>
+</body>
+</html>
