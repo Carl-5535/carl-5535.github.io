@@ -6,7 +6,7 @@
     <meta name="referrer" content="origin">
     <meta http-equiv="Cache-Control" content="no-transform">
     <meta http-equiv="Cache-Control" content="no-siteapp">
-    <title>归档</title>
+    <title>Linux命令-sed</title>
 
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/LongCang.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Monda.css">
@@ -17,86 +17,202 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Rosario.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/UbuntuMono.css">
 
-    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/archive.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/post.css">
+    
+        <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/normal.css">
+    
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/jquery-3.4.1.min.js"></script>
+
 <meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Carl������վ" type="application/atom+xml">
 </head>
 <body>
     <a id="cover"></a>
     <div id="header">
-    <div class="header" >
+    <div class="header">
         <div class="vertical">
             <div class="inner">
-                <h1 class="header-title"></h1>
-                <h2 class="header-description" id="hitokoto"></h2>
-                <h3 class="header-info" id="hitokotoAuthor"></h3>
-                <!--
-                <h1 class="header-subtitle"></h1>
-                <p class="header-subinfo"></p>
-                -->
+                <h1 class="header-subtitle">Linux命令-sed</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2020-11-17
+                        </span>
+                        
+                            <span id="/2020/11/17/Linux命令-sed/" class="leancloud_visitors" data-flag-title="Linux命令-sed">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/17/Linux命令-sed/"></span>
+                        </span>  
+                    </p>                 
+                </div>
             </div>
         </div>
-        <a class="scroll-down" href="javascript:;" target="_self" data-offset="-45">
-            <span class="hidden">Scroll Down</span>
-            <i class="scroll-down-icon iconfont icon-return"></i>
-        </a>
+        <canvas id="articleHeaderCanvas"></canvas>
     </div>
 </div>
     <div id="container">
     <div id="content">
-        
-    <div class="articles">
-        
-        
-            
-                
-                    
-                    <div class="archives-wrap">      
-                        <div class="archive-year-wrap">
-                            <a href="/archive/2020" class="archive-year">
-                                2020
-                            </a>
-                        </div>
-                        <div class="archives">
-            
-                            <div class="archive">
-                                <div class="article">
-                                    <a href="javascript:;">
-                                        <span>11/09</span>
-                                    </a>
-                                    <h2>
-                                        <a class="article-title" href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-2/">自学Python-基本数据结构(2)</a> 
-                                    </h2>
-                                </div>
-                            </div>     
-        
-            
-                            <div class="archive">
-                                <div class="article">
-                                    <a href="javascript:;">
-                                        <span>11/08</span>
-                                    </a>
-                                    <h2>
-                                        <a class="article-title" href="/2020/11/08/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-1/">自学Python-基本数据结构(1)</a> 
-                                    </h2>
-                                </div>
-                            </div>     
-        
-        
+        <div id="article">
+    <div class="toc"></div>
+    <div class="article-body">
+        <h1 id="Linux命令—sed"><a href="#Linux命令—sed" class="headerlink" title="Linux命令—sed"></a>Linux命令—sed</h1><p>sed 会根据脚本命令来处理文本文件中的数据，这些命令要么从命令行中输入，要么存储在一个文本文件中，此命令执行数据的顺序如下：  </p>
+<ul>
+<li>每次仅读取一行内容；</li>
+<li>根据提供的规则命令匹配并修改数据。注意，sed 默认不会直接修改源文件数据，而是会将数据复制到缓冲区中，修改也仅限于缓冲区中的数据；</li>
+<li>将执行结果输出。 </li>
+</ul>
+<p>当一行数据匹配完成后，它会继续读取下一行数据，并重复这个过程，直到将文件中所有数据处理完毕。</p>
+<h2 id="sed-命令的基本格式"><a href="#sed-命令的基本格式" class="headerlink" title="sed 命令的基本格式"></a>sed 命令的基本格式</h2><pre><code>sed [选项] [脚本命令] 文件名</code></pre>
+<p>该命令常用的选项及含义，如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th align="left">选项</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-e</td>
+<td align="left">该选项会将其后跟的脚本命令添加到已有的命令中。</td>
+</tr>
+<tr>
+<td align="left">-f</td>
+<td align="left">该选项会将其后文件中的脚本命令添加到已有的命令中。</td>
+</tr>
+<tr>
+<td align="left">-n</td>
+<td align="left">默认情况下，sed 会在所有的脚本指定执行完毕后，会自动输出处理后的内容，而该选项会屏蔽启动输出，需使用 print 命令来完成输出。</td>
+</tr>
+<tr>
+<td align="left">-i</td>
+<td align="left">此选项会直接修改源文件，要慎用。</td>
+</tr>
+</tbody></table>
+<h2 id="sed-s-替换脚本命令"><a href="#sed-s-替换脚本命令" class="headerlink" title="sed s 替换脚本命令"></a>sed s 替换脚本命令</h2><p>此命令的基本格式为：  </p>
+<pre><code>[address]s/pattern/replacement/flags</code></pre>
+<p>其中，address 表示指定要操作的具体行，pattern 指的是需要替换的内容，replacement 指的是要替换的新内容。此命令中常用的 flags 标记如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th align="left">flag</th>
+<th align="left">功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">n</td>
+<td align="left">1~512 之间的数字，表示指定要替换的字符串出现第几次时才进行替换，例如，一行中有 3 个 A，但用户只想替换第二个 A，这时就用到这个标记；</td>
+</tr>
+<tr>
+<td align="left">g</td>
+<td align="left">对数据中所有匹配到的内容进行替换，如果没有 g，则只会在第一次匹配成功时做替换操作。例如，一行数据中有 3 个 A，则只会替换第一个 A；</td>
+</tr>
+<tr>
+<td align="left">p</td>
+<td align="left">会打印与替换命令中指定的模式匹配的行。此标记通常与 -n 选项一起使用。</td>
+</tr>
+<tr>
+<td align="left">w file</td>
+<td align="left">将缓冲区中的内容写到指定的 file 文件中；</td>
+</tr>
+<tr>
+<td align="left">&amp;</td>
+<td align="left">用正则表达式匹配的内容进行替换；</td>
+</tr>
+<tr>
+<td align="left">\n</td>
+<td align="left">匹配第 n 个子串，该子串之前在 pattern 中用 \ ( \ ) 指定。</td>
+</tr>
+<tr>
+<td align="left">\</td>
+<td align="left">转义（转义替换部分包含：&amp;、\ 等）。</td>
+</tr>
+</tbody></table>
+<p>来试验一下这个命令，首先创建一个文件并包含以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat test.txt</span><br><span class="line">hello world!</span><br><span class="line">hello carl!</span><br><span class="line">hello jack!</span><br><span class="line">Hi carl!</span><br></pre></td></tr></table></figure>
+<p>将carl替换成sam并输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ sed &#39;s&#x2F;carl&#x2F;sam&#x2F;1&#39; test.txt</span><br><span class="line">hello world!</span><br><span class="line">hello sam!</span><br><span class="line">hello jack!</span><br><span class="line">Hi sam!</span><br></pre></td></tr></table></figure>
+<p>将jack替换成carl只输出有修改的行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sed -n &#39;s&#x2F;jack&#x2F;sam&#x2F;p&#39; test.txt</span><br><span class="line">hello sam!</span><br></pre></td></tr></table></figure>
+<p>将hello替换成Hi，并保存到hi.txt中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ sed -n &#39;s&#x2F;hello&#x2F;Hi&#x2F;w hi.txt&#39; test.txt</span><br><span class="line">$ cat hi.txt</span><br><span class="line">Hi world!</span><br><span class="line">Hi carl!</span><br><span class="line">Hi jack!</span><br></pre></td></tr></table></figure>
+
+<h2 id="sed-d-删除脚本命令"><a href="#sed-d-删除脚本命令" class="headerlink" title="sed d 删除脚本命令"></a>sed d 删除脚本命令</h2><p>命令格式如下：  </p>
+<pre><code>[address]d</code></pre>
+<p>如果需要删除文本中的特定行，可以用 d 脚本命令，它会删除指定行中的所有内容。但使用该命令时要特别小心，如果你忘记指定具体行的话，文件中的所有内容都会被删除。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ cat hi.txt</span><br><span class="line">Hi world!</span><br><span class="line">Hi carl!</span><br><span class="line">Hi jack!</span><br><span class="line">$ sed -i &#39;d&#39; hi.txt</span><br><span class="line">$ cat hi.txt</span><br><span class="line">#什么也没输出，文件为空</span><br></pre></td></tr></table></figure>
+<h3 id="删除指定行"><a href="#删除指定行" class="headerlink" title="删除指定行"></a>删除指定行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ sed  &#39;1d&#39; test.txt</span><br><span class="line">hello carl!</span><br><span class="line">hello jack!</span><br><span class="line">Hi carl!</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除指定区间所有行"><a href="#删除指定区间所有行" class="headerlink" title="删除指定区间所有行"></a>删除指定区间所有行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sed  &#39;2,3d&#39; test.txt</span><br><span class="line">hello world!</span><br><span class="line">Hi carl!</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除指定行开始的所有行"><a href="#删除指定行开始的所有行" class="headerlink" title="删除指定行开始的所有行"></a>删除指定行开始的所有行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sed  &#39;2,$d&#39; test.txt</span><br><span class="line">hello world!</span><br></pre></td></tr></table></figure>
+
+<h2 id="sed-a-和-i-脚本命令"><a href="#sed-a-和-i-脚本命令" class="headerlink" title="sed a 和 i 脚本命令"></a>sed a 和 i 脚本命令</h2><p>此命令格式如下：</p>
+<pre><code>[address]a（或 i）\新文本内容</code></pre>
+<p>a 命令表示在指定行的后面附加一行，i 命令表示在指定行的前面插入一行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ sed  &#39;1a\this is new line&#39; test.txt</span><br><span class="line">hello world!</span><br><span class="line">this is new line</span><br><span class="line">hello carl!</span><br><span class="line">hello jack!</span><br><span class="line">Hi carl!</span><br><span class="line">$ sed  &#39;1i\this is new line&#39; test.txt</span><br><span class="line">this is new line</span><br><span class="line">hello world!</span><br><span class="line">hello carl!</span><br><span class="line">hello jack!</span><br><span class="line">Hi carl!</span><br></pre></td></tr></table></figure>
+<h2 id="sed-c-替换脚本命令"><a href="#sed-c-替换脚本命令" class="headerlink" title="sed c 替换脚本命令"></a>sed c 替换脚本命令</h2><p>该命令的基本格式为：<br>    [address]c\用于替换的新文本</p>
+<p>c 命令表示将指定行中的所有内容，替换成该选项后面的字符串。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ sed  &#39;3c\123&#39; test.txt</span><br><span class="line">hello world!</span><br><span class="line">hello carl!</span><br><span class="line">123</span><br><span class="line">Hi carl!</span><br></pre></td></tr></table></figure>
+
+<h2 id="sed-q-退出脚本命令"><a href="#sed-q-退出脚本命令" class="headerlink" title="sed q 退出脚本命令"></a>sed q 退出脚本命令</h2><p>q 命令的作用是使 sed 命令在第一次匹配任务结束后，退出 sed 程序，不再进行对后续数据的处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sed &#39;2q&#39; test.txt</span><br><span class="line">hello world!</span><br><span class="line">hello carl!</span><br></pre></td></tr></table></figure>
+        <p class="suffix-end">__END__</p>
+        <div class="suffix-box">
+            <div class="suffix-box-left">
+                <img src="https://cdn.jsdelivr.net/gh/Carl-5535/images@master/head/carl.jpg" alt="Carl Chen">
             </div>
+            <div class="suffix-box-right">
+                <span class="suffix-box-title">文章作者</span>：Carl Chen
+                <br>
+                <span class="suffix-box-title">文章出处</span>：<a href="/2020/11/17/Linux%E5%91%BD%E4%BB%A4-sed/" target="_blank">Linux命令-sed</a>
+                <br>
+                <span class="suffix-box-title">作者签名</span>：不想秃头的Carl.
+                <br>
+                <span class="suffix-box-title">关于主题</span>：<a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+                <br>
+                <span class="suffix-box-title">版权声明</span>：文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+                <br>
+            </div>
+            <div style="clear: both;"></div>
         </div>
+    </div>
+    <div class="article-footer">
         
-    </div>   
-
-
-    <div class="pagination-bottom">
-        <div class="pagination">
+            <div class="category">
+                分类：
+                
+                    <a href="/category/Linux%E5%91%BD%E4%BB%A4/">Linux命令</a>
+                
+            </div>
+        
+        
+            <div class="tag">
+                标签：
+                
+                    <a href="/tags/Linux%E5%91%BD%E4%BB%A4/">Linux命令</a>
+                
+            </div>
+        
+        <div class="article-prev-next">
             
-                <a class="extend prev" rel="prev" href="/archive/">上一页</a><a class="page-number" href="/archive/">1</a><span class="page-number current">2</span>
+            
+                <a href="/2020/11/13/Python%E8%84%9A%E6%9C%AC-%E5%88%A0%E9%99%A4Windows%E4%B8%8A%E7%9A%84%E6%8D%A2%E8%A1%8C%E7%AC%A6/" class="next-prefix">» </a> 下一篇：    <a href="/2020/11/13/Python%E8%84%9A%E6%9C%AC-%E5%88%A0%E9%99%A4Windows%E4%B8%8A%E7%9A%84%E6%8D%A2%E8%A1%8C%E7%AC%A6/" title="发布于 2020-11-13 07:11">Python脚本-删除Windows上的换行符</a>
             
         </div>
     </div>
+    
+    <div class="article-comments">
+        <div class="comments-title">
+            评论列表
+        </div>
+        <div class="comments-content">
+        </div>
+    </div>
+
+</div>
 
     </div>
 </div>
