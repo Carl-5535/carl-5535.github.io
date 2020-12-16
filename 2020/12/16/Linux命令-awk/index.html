@@ -6,8 +6,7 @@
     <meta name="referrer" content="origin">
     <meta http-equiv="Cache-Control" content="no-transform">
     <meta http-equiv="Cache-Control" content="no-siteapp">
-    
-    <title>分类</title>
+    <title>Linux命令-awk</title>
 
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/LongCang.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Monda.css">
@@ -18,12 +17,13 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Rosario.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/UbuntuMono.css">
 
-    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/page.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/post.css">
     
         <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/normal.css">
     
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/jquery-3.4.1.min.js"></script>
+
 <meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Carl������վ" type="application/atom+xml">
 </head>
 <body>
@@ -32,10 +32,21 @@
     <div class="header">
         <div class="vertical">
             <div class="inner">
-                <h1 class="header-subtitle">分类</h1>
+                <h1 class="header-subtitle">Linux命令-awk</h1>
                 <div class="header-subinfo">
-                    <p class="article-info-text Chinese"></p>
-                    <p class="article-info-text English"></p>                  
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2020-12-16
+                        </span>
+                        
+                            <span id="/2020/12/16/Linux命令-awk/" class="leancloud_visitors" data-flag-title="Linux命令-awk">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/12/16/Linux命令-awk/"></span>
+                        </span>  
+                    </p>                 
                 </div>
             </div>
         </div>
@@ -44,14 +55,122 @@
 </div>
     <div id="container">
     <div id="content">
-        <div class="categories">
-    <div class="categories-title">
-        目前共计 5 个分类
+        <div id="article">
+    <div class="toc"></div>
+    <div class="article-body">
+        <h1 id="Linux命令—awk"><a href="#Linux命令—awk" class="headerlink" title="Linux命令—awk"></a>Linux命令—awk</h1><blockquote>
+<p>awk不仅仅时linux系统中的一个命令，而且是一种编程语言，可以用来处理数据和生成报告（excel）。处理的数据可以是一个或多个文件，可以是来自标准输入，也可以通过管道获取标准输入，awk可以在命令行上直接编辑命令进行操作，也可以编写成awk程序来进行更为复杂的运用。</p>
+</blockquote>
+<p>本章主要讲解awk命令的运用</p>
+<h2 id="awk格式"><a href="#awk格式" class="headerlink" title="awk格式"></a>awk格式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk [option] <span class="string">&#x27;PATTERN&#123;ACTION STATEMENTS&#125;&#x27;</span> FILE</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/Carl-5535/images@master/blog/awk.1leod5jhbvfk.png" alt="awk"></p>
+<ul>
+<li>awk指令是由模式，动作，或者模式和动作的组合组成。</li>
+<li>模式既pattern,可以类似理解成sed的模式匹配，可以由表达式组成，也可以是两个正斜杠之间的正则表达式。比如NR==1，这就是模式，可以把他理解为一个条件。</li>
+<li>动作即action，是由在大括号里面的一条或多条语句组成，语句之间使用分号隔开。比如awk使用格式：</li>
+<li>pattern既模式，也可以理解为条件，也叫找谁，你找谁？高矮，胖瘦，男女？都是条件，既模式。</li>
+<li>action既动作，可以理解为干啥，找到人之后你要做什么。<br>模式和动作的详细介绍我们放在后面部分，现在大家先对awk结构有一个了解。</li>
+</ul>
+<h2 id="常用内建变量（可以直接使用的变量）"><a href="#常用内建变量（可以直接使用的变量）" class="headerlink" title="常用内建变量（可以直接使用的变量）"></a>常用内建变量（可以直接使用的变量）</h2><ul>
+<li>$0：完整的输入记录</li>
+<li>$n：当前记录的第n个字段，字段间由FS分隔</li>
+<li>FS：input field seperator：输入字段分隔符，默认空白字符。也可使用-v指定。</li>
+<li>OFS：输出字段分隔符。使用-v指定。</li>
+<li>RS：输入时的换行符</li>
+<li>ORS：输出时的换行符</li>
+<li>NF：number of field 每一行的字段数量。加上$NF表示最后一列。</li>
+<li>NR：number of record 文件的行数，打印出来是打印行号</li>
+<li>FILENAME：当前文件的文件名</li>
+</ul>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><ul>
+<li><p>print<br>输出格式：print item1,item2 …<br>备注：使用逗号作为分隔符；输出item可以是字符串、內建变量、awk表达式；若省略item，则显示$0整行；</p>
+</li>
+<li><p>printf<br>格式化输出：printf FORMAT, item1, item2…按位放在format中。<br>注意事项：format必须要给出；如需换行，必须要显示写出；format中需要为后面每个item指定格式符；</p>
+</li>
+<li><p>F<br>指定输入文件折分隔符</p>
+</li>
+</ul>
+<hr>
+<h2 id="awk的简单使用"><a href="#awk的简单使用" class="headerlink" title="awk的简单使用"></a>awk的简单使用</h2><p>待处理文件为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat test.txt</span><br><span class="line">hello world!</span><br><span class="line">hello carl!</span><br><span class="line">hello jack!</span><br><span class="line">Hi carl!</span><br></pre></td></tr></table></figure>
+
+<h3 id="输出文件全部内容"><a href="#输出文件全部内容" class="headerlink" title="输出文件全部内容"></a>输出文件全部内容</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ awk <span class="string">&#x27;&#123;print $0&#125;&#x27;</span> test.txt</span><br><span class="line">hello world!</span><br><span class="line">hello carl!</span><br><span class="line">hello jack!</span><br><span class="line">Hi carl!</span><br></pre></td></tr></table></figure>
+
+<h3 id="输出第一列内容"><a href="#输出第一列内容" class="headerlink" title="输出第一列内容"></a>输出第一列内容</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ awk <span class="string">&#x27;&#123;print $1&#125;&#x27;</span> test.txt</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">Hi</span><br></pre></td></tr></table></figure>
+
+<h3 id="输出第2行到第4行的内容"><a href="#输出第2行到第4行的内容" class="headerlink" title="输出第2行到第4行的内容"></a>输出第2行到第4行的内容</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ awk <span class="string">&#x27;NR&gt;2&amp;&amp;NR&lt;4 &#123;print $0&#125;&#x27;</span> test.txt</span><br><span class="line">hello jack!</span><br></pre></td></tr></table></figure>
+
+<h3 id="以o为分隔符输出第一列和第二列内容"><a href="#以o为分隔符输出第一列和第二列内容" class="headerlink" title="以o为分隔符输出第一列和第二列内容"></a>以o为分隔符输出第一列和第二列内容</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">awk -Fo &#x27;&#123;print $1,$2&#125;&#x27; test.txt</span><br><span class="line">hell  w</span><br><span class="line">hell  carl!</span><br><span class="line">hell  jack!</span><br><span class="line">Hi carl!</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="awk进阶使用"><a href="#awk进阶使用" class="headerlink" title="awk进阶使用"></a>awk进阶使用</h2><h3 id="打印九九乘法表"><a href="#打印九九乘法表" class="headerlink" title="打印九九乘法表"></a>打印九九乘法表</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">seq 9 | sed <span class="string">&#x27;H;g&#x27;</span> | awk -v RS=<span class="string">&#x27;&#x27;</span> <span class="string">&#x27;&#123;for(i=1;i&lt;=NF;i++)printf(&quot;%dx%d=%d%s&quot;, i, NR, i*NR, i==NR?&quot;\n&quot;:&quot;\t&quot;)&#125;&#x27;</span></span><br><span class="line">1x1=1</span><br><span class="line">1x2=2   2x2=4</span><br><span class="line">1x3=3   2x3=6   3x3=9</span><br><span class="line">1x4=4   2x4=8   3x4=12  4x4=16</span><br><span class="line">1x5=5   2x5=10  3x5=15  4x5=20  5x5=25</span><br><span class="line">1x6=6   2x6=12  3x6=18  4x6=24  5x6=30  6x6=36</span><br><span class="line">1x7=7   2x7=14  3x7=21  4x7=28  5x7=35  6x7=42  7x7=49</span><br><span class="line">1x8=8   2x8=16  3x8=24  4x8=32  5x8=40  6x8=48  7x8=56  8x8=64</span><br><span class="line">1x9=9   2x9=18  3x9=27  4x9=36  5x9=45  6x9=54  7x9=63  8x9=72  9x9=81</span><br></pre></td></tr></table></figure>
+
+<h3 id="获取eth1网口ipV4地址"><a href="#获取eth1网口ipV4地址" class="headerlink" title="获取eth1网口ipV4地址"></a>获取eth1网口ipV4地址</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ifconfig eth1|grep <span class="string">&#x27;inet addr&#x27;</span> | awk -F <span class="string">&#x27;[: ]+&#x27;</span>  <span class="string">&#x27;&#123;print $4&#125;&#x27;</span></span><br><span class="line">192.168.1.1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>‘+’代表多个连续的分隔符当做一个分隔符</li>
+</ul>
+<h3 id="计算文件大小"><a href="#计算文件大小" class="headerlink" title="计算文件大小"></a>计算文件大小</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ls -l *.txt | awk <span class="string">&#x27;&#123;sum+=$5&#125; END &#123;print sum&#125;&#x27;</span></span><br><span class="line">46</span><br></pre></td></tr></table></figure>
+
+        <p class="suffix-end">__END__</p>
+        <div class="suffix-box">
+            <div class="suffix-box-left">
+                <img src="https://cdn.jsdelivr.net/gh/Carl-5535/images@master/head/carl.jpg" alt="Carl Chen">
+            </div>
+            <div class="suffix-box-right">
+                <span class="suffix-box-title">文章作者</span>：Carl Chen
+                <br>
+                <span class="suffix-box-title">文章出处</span>：<a href="/2020/12/16/Linux%E5%91%BD%E4%BB%A4-awk/" target="_blank">Linux命令-awk</a>
+                <br>
+                <span class="suffix-box-title">作者签名</span>：不想秃头的Carl.
+                <br>
+                <span class="suffix-box-title">关于主题</span>：<a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+                <br>
+                <span class="suffix-box-title">版权声明</span>：文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+                <br>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
     </div>
-    <div class="categories-content">
-        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/category/Linux%E5%91%BD%E4%BB%A4/">Linux命令</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/category/python%E8%84%9A%E6%9C%AC/">python脚本</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/category/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/category/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95/">经典算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/category/%E8%87%AA%E5%AD%A6Python/">自学Python</a><span class="category-list-count">10</span></li></ul>
+    <div class="article-footer">
+        
+            <div class="category">
+                分类：
+                
+                    <a href="/category/Linux%E5%91%BD%E4%BB%A4/">Linux命令</a>
+                
+            </div>
+        
+        
+            <div class="tag">
+                标签：
+                
+                    <a href="/tags/Linux%E5%91%BD%E4%BB%A4/">Linux命令</a>
+                
+            </div>
+        
+        <div class="article-prev-next">
+            
+                <a href="/2020/12/16/Linux%E5%91%BD%E4%BB%A4-grep/" class="prev-prefix">« </a> 上一篇：    <a href="/2020/12/16/Linux%E5%91%BD%E4%BB%A4-grep/" title="发布于 2020-12-16 08:53">Linux命令-grep</a>
+                <br>
+            
+            
+                <a href="/2020/12/10/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%882%EF%BC%89/" class="next-prefix">» </a> 下一篇：    <a href="/2020/12/10/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%882%EF%BC%89/" title="发布于 2020-12-10 02:20">排序算法（2）</a>
+            
+        </div>
     </div>
+    
+    <div class="article-comments">
+        <div class="comments-title">
+            评论列表
+        </div>
+        <div class="comments-content">
+        </div>
+    </div>
+
 </div>
+
     </div>
 </div>
     <div id="footer"></div>
