@@ -6,7 +6,7 @@
     <meta name="referrer" content="origin">
     <meta http-equiv="Cache-Control" content="no-transform">
     <meta http-equiv="Cache-Control" content="no-siteapp">
-    <title>Live For Code</title>
+    <title>文件I/O</title>
 
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/LongCang.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Monda.css">
@@ -17,325 +17,220 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Rosario.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/UbuntuMono.css">
 
-    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/index.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/post.css">
+    
+        <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/normal.css">
+    
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/jquery-3.4.1.min.js"></script>
+
 <meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Carl������վ" type="application/atom+xml">
 </head>
 <body>
     <a id="cover"></a>
     <div id="header">
-    <div class="header" >
+    <div class="header">
         <div class="vertical">
             <div class="inner">
-                <h1 class="header-title"></h1>
-                <h2 class="header-description" id="hitokoto"></h2>
-                <h3 class="header-info" id="hitokotoAuthor"></h3>
-                <!--
-                <h1 class="header-subtitle"></h1>
-                <p class="header-subinfo"></p>
-                -->
+                <h1 class="header-subtitle">文件I/O</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2021-02-01
+                        </span>
+                        
+                            <span id="/2021/02/01/文件I-O/" class="leancloud_visitors" data-flag-title="文件I/O">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/02/01/文件I-O/"></span>
+                        </span>  
+                    </p>                 
+                </div>
             </div>
         </div>
-        <a class="scroll-down" href="javascript:;" target="_self" data-offset="-45">
-            <span class="hidden">Scroll Down</span>
-            <i class="scroll-down-icon iconfont icon-return"></i>
-        </a>
+        <canvas id="articleHeaderCanvas"></canvas>
     </div>
 </div>
     <div id="container">
     <div id="content">
-        <div class="articles">
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2020/11/13/%E8%87%AA%E5%AD%A6Python-%E6%A0%87%E5%87%86%E5%BA%93sys/">自学Python-标准库sys</a>
-                
+        <div id="article">
+    <div class="toc"></div>
+    <div class="article-body">
+        <h1 id="文件I-O"><a href="#文件I-O" class="headerlink" title="文件I/O"></a>文件I/O</h1><p>人们常说Linux上一切皆文件，所以文件操作是Linux系统编程中重要的部分之一</p>
+<p>文件的操作顺序一般为：打开(创建)、读/写、关闭文</p>
+<h2 id="打开文件-open"><a href="#打开文件-open" class="headerlink" title="打开文件 open()"></a>打开文件 open()</h2><p>通过系统调用open()，可以打开文件并获取文件描述符</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span> <span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name, <span class="keyword">int</span> flags)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span> <span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name, <span class="keyword">int</span> flags,<span class="keyword">mode_t</span> mode)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果调用成功则返回指向所打开文件的文件描述符，文件打开方式根据flags的值来确定</p>
+<h3 id="flags参数"><a href="#flags参数" class="headerlink" title="flags参数"></a>flags参数</h3><p>flags 参数由一个或多个标志位的按位或组合。它支持三种访问模式：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>O_RDONLY</td>
+<td>以只读方式打开</td>
+</tr>
+<tr>
+<td>O_WRONLY</td>
+<td>以只写方式打开</td>
+</tr>
+<tr>
+<td>O_RDWR</td>
+<td>以读写方式打开</td>
+</tr>
+</tbody></table>
+<p>flgs 还可以和下面这些值进行按位或运算，修改打开文件的行为：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>O_APPEND</td>
+<td>文件以追加模式打开。也就是说，每次写操作都从文件尾开始</td>
+</tr>
+<tr>
+<td>O_CREAT</td>
+<td>当文件不存在时，自动创建文件</td>
+</tr>
+<tr>
+<td>O_DIRECT</td>
+<td>打开文件用于直接I/O</td>
+</tr>
+<tr>
+<td>O_CLOEXEC</td>
+<td>在执行新的进程时，文件会自动关闭</td>
+</tr>
+<tr>
+<td>O_DIRECTORY</td>
+<td>如果name不是目录则调用失败(带此参数内部调用opendir())</td>
+</tr>
+<tr>
+<td>O_NOATIME+</td>
+<td>读文件时，不会更新文件的最后访问时间</td>
+</tr>
+<tr>
+<td>O_NONBLOCK</td>
+<td>文件以非阻塞模式打开</td>
+</tr>
+<tr>
+<td>O_SYNC</td>
+<td>打开文件用于同步I/O</td>
+</tr>
+<tr>
+<td>O_TRUNC</td>
+<td>如果文件存在，且为普通文件，并且有写权限，则文件会被截断为0</td>
+</tr>
+</tbody></table>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> fd;</span><br><span class="line"><span class="comment">//以读写方式打开文件test，并将其截断为0</span></span><br><span class="line">fd = open(<span class="string">&quot;test&quot;</span>, O_RDWR | O_TRUNC);</span><br></pre></td></tr></table></figure>
+
+<h3 id="mode参数"><a href="#mode参数" class="headerlink" title="mode参数"></a>mode参数</h3><p>mode 参数只有在创建文件时才有意义，及给定O_CREAT参数时一定要添加mode参数，如果没有提供，结果则是未定义的</p>
+<p>mode 参数通常是UNIX权位集合，比如八进制数0644，0777等</p>
+<h2 id="读文件-read"><a href="#读文件-read" class="headerlink" title="读文件 read()"></a>读文件 read()</h2><p>最常见的读取文件时调用read(),定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">read</span> <span class="params">(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> len)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>每次调用read()函数，会从fd指向的文件的当前偏移开始读取len字节到buf中，成功返回读取的字节数，失败返回-1，并设置errno,下面是一个简单的实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> buf[<span class="number">64</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> ret = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">ret = read (fd, buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line"><span class="keyword">if</span> (ret == <span class="number">-1</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/*error*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个实现存在两个经常被人忽略的问题，以至于有很多人这么使用read()</p>
+<ol>
+<li>可能还没读取len字节，调用就返回了</li>
+<li>可能产生某些可操作的错误，但是没有检查</li>
+</ol>
+<h3 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h3><p>使用read()时，还需考虑返回值为0的情况。当到达文件末尾时，read()返回0，在这种情况下，没有读到任何字节。EOF并不表示出错，它仅仅表示文件位置已经到达文件结尾，因此没有数据可读了</p>
+<p>但是，如果调用要读取len个字节，但是没有一个字节刻度，调用就会阻塞</p>
+<p>实际上，调用read()有很多可能的结果：</p>
+<ul>
+<li>调用返回值等于len。结果和预期一致</li>
+<li>调用返回值小于len，大于0。可读字节大于0小于len，在读取len之前到达EOF或是信号中断或读取出错</li>
+<li>没有可读数据，调用阻塞</li>
+<li>调用返回EOF没有更多可读数据</li>
+<li>调用返回-1，errno设为EINTR。表示在读取任何字节前收到阻塞信号，调用可以重新执行</li>
+<li>调用返回-1，errno设为EAGAIN。当前没有数据可用，读操作会阻塞（非阻塞模式才会发生）</li>
+<li>调用返回-1，errno为EINTR和EAGAIN之外的值，这表示更严重的错误</li>
+</ul>
+<p>根据上面的返回值可以优化read()调用：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ret;</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (len != <span class="number">0</span> &amp;&amp; ret = read (fd, buf, len) != <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (ret == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (errno == EINTR)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        perror (<span class="string">&quot;read&quot;</span>);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    len -= ret;</span><br><span class="line">    buf += ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="写文件-write"><a href="#写文件-write" class="headerlink" title="写文件 write()"></a>写文件 write()</h2><p>最基础常见的系统调用时write()，定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">write</span> <span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> count)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>write()调用会从文件描述符fd指向的文件的当前位置开始。将buf中至多count个字节写入文件中。不支持seek的文件总是从起始位置开始写</p>
+<p>write()执行成功时，会返回写入的字节数并更新文件位置，出错时返回-1，并设置errno值，下面是简单实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *buf = <span class="string">&quot;Hello World!&quot;</span>;</span><br><span class="line"><span class="keyword">ssize_t</span> ret;</span><br><span class="line"></span><br><span class="line">ret = write (fd, buf, <span class="built_in">strlen</span> (buf));</span><br><span class="line"><span class="keyword">if</span> (ret == <span class="number">-1</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/* error */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="追加模式"><a href="#追加模式" class="headerlink" title="追加模式"></a>追加模式</h3><p>当以追加模式(参数设置O_APPEND)打开文件描述符时，写操作则是从文件尾开始的</p>
+<p>多个进程写同一文件时此模式能保证数据不会被覆盖而造成数据丢失，追加模式可以理解成每次写请求之前都会更新文件位置，指向写入的数据末尾，这和write()无关，因为更新位置是自动完成的</p>
+<h2 id="关闭文件-close"><a href="#关闭文件-close" class="headerlink" title="关闭文件 close()"></a>关闭文件 close()</h2><p>当完成对某个文件的操作后，可以通过系统调用close()取消文件描述符到对应文件的映射：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span> <span class="params">(<span class="keyword">int</span> fd)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>调用后，先前给定的文件描述符fd将不再有效，它的用法也很简单：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (close (fd) == <span class="number">-1</span>)</span><br><span class="line">&#123;</span><br><span class="line">    perror (<span class="string">&quot;close&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        <p class="suffix-end">__END__</p>
+        <div class="suffix-box">
+            <div class="suffix-box-left">
+                <img src="https://cdn.jsdelivr.net/gh/Carl-5535/images@master/head/carl.jpg" alt="Carl Chen">
             </div>
-            <div class="article-abstract">
-                
-                    摘要：标准库sys的学习
-                    <a href="/2020/11/13/%E8%87%AA%E5%AD%A6Python-%E6%A0%87%E5%87%86%E5%BA%93sys/">阅读全文</a>
-                
+            <div class="suffix-box-right">
+                <span class="suffix-box-title">文章作者</span>：Carl Chen
+                <br>
+                <span class="suffix-box-title">文章出处</span>：<a href="/2021/02/01/%E6%96%87%E4%BB%B6I-O/" target="_blank">文件I/O</a>
+                <br>
+                <span class="suffix-box-title">作者签名</span>：不想秃头的Carl.
+                <br>
+                <span class="suffix-box-title">关于主题</span>：<a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+                <br>
+                <span class="suffix-box-title">版权声明</span>：文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+                <br>
             </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2020-11-13
-                </span>
-                
-                    <span id="/2020/11/13/自学Python-标准库sys/" class="leancloud_visitors" data-flag-title="自学Python-标准库sys">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/13/自学Python-标准库sys/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
+            <div style="clear: both;"></div>
         </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2020/11/13/%E8%87%AA%E5%AD%A6Python-%E6%A0%87%E5%87%86%E5%BA%93os/">自学Python-标准库os</a>
+    </div>
+    <div class="article-footer">
+        
+            <div class="category">
+                分类：
+                
+                    <a href="/category/linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/">linux系统编程</a>
                 
             </div>
-            <div class="article-abstract">
+        
+        
+            <div class="tag">
+                标签：
                 
-                    摘要：标准库os的学习
-                    <a href="/2020/11/13/%E8%87%AA%E5%AD%A6Python-%E6%A0%87%E5%87%86%E5%BA%93os/">阅读全文</a>
+                    <a href="/tags/linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/">linux系统编程</a>
                 
             </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2020-11-13
-                </span>
-                
-                    <span id="/2020/11/13/自学Python-标准库os/" class="leancloud_visitors" data-flag-title="自学Python-标准库os">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/13/自学Python-标准库os/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
+        
+        <div class="article-prev-next">
+            
+                <a href="/2021/02/01/I-O%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" class="prev-prefix">« </a> 上一篇：    <a href="/2021/02/01/I-O%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" title="发布于 2021-02-01 09:56">I/O多路复用</a>
+                <br>
+            
+            
+                <a href="/2021/01/20/zip%E5%91%BD%E4%BB%A4/" class="next-prefix">» </a> 下一篇：    <a href="/2021/01/20/zip%E5%91%BD%E4%BB%A4/" title="发布于 2021-01-20 08:41">zip命令</a>
+            
         </div>
+    </div>
     
-        <div class="article">
-            <div class="article-title">
-                <a href="/2020/11/13/%E8%87%AA%E5%AD%A6Python-%E5%87%BD%E6%95%B0/">自学Python-函数</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：python函数学习
-                    <a href="/2020/11/13/%E8%87%AA%E5%AD%A6Python-%E5%87%BD%E6%95%B0/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2020-11-13
-                </span>
-                
-                    <span id="/2020/11/13/自学Python-函数/" class="leancloud_visitors" data-flag-title="自学Python-函数">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/13/自学Python-函数/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
+    <div class="article-comments">
+        <div class="comments-title">
+            评论列表
         </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2020/11/10/%E8%87%AA%E5%AD%A6Python-%E6%96%87%E4%BB%B6/">自学Python-文件</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：文件操作.
-                    <a href="/2020/11/10/%E8%87%AA%E5%AD%A6Python-%E6%96%87%E4%BB%B6/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2020-11-10
-                </span>
-                
-                    <span id="/2020/11/10/自学Python-文件/" class="leancloud_visitors" data-flag-title="自学Python-文件">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/10/自学Python-文件/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
+        <div class="comments-content">
         </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2020/11/10/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-3/">自学Python-语句(3)</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：循环语句.
-                    <a href="/2020/11/10/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-3/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2020-11-10
-                </span>
-                
-                    <span id="/2020/11/10/自学Python-语句-3/" class="leancloud_visitors" data-flag-title="自学Python-语句(3)">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/10/自学Python-语句-3/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
-        </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2020/11/10/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-2/">自学Python-语句(2)</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：条件语句.
-                    <a href="/2020/11/10/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-2/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2020-11-10
-                </span>
-                
-                    <span id="/2020/11/10/自学Python-语句-2/" class="leancloud_visitors" data-flag-title="自学Python-语句(2)">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/10/自学Python-语句-2/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
-        </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-1/">自学Python-语句(1)</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：print语句、import语句、赋值语句.
-                    <a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-1/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2020-11-09
-                </span>
-                
-                    <span id="/2020/11/09/自学Python-语句-1/" class="leancloud_visitors" data-flag-title="自学Python-语句(1)">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/09/自学Python-语句-1/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
-        </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-3/">自学Python-基本数据结构(3)</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：集合.
-                    <a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-3/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2020-11-09
-                </span>
-                
-                    <span id="/2020/11/09/自学Python-基本数据结构-3/" class="leancloud_visitors" data-flag-title="自学Python-基本数据结构(3)">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/09/自学Python-基本数据结构-3/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
-        </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-2/">自学Python-基本数据结构(2)</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：字典.
-                    <a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-2/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2020-11-09
-                </span>
-                
-                    <span id="/2020/11/09/自学Python-基本数据结构-2/" class="leancloud_visitors" data-flag-title="自学Python-基本数据结构(2)">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/09/自学Python-基本数据结构-2/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
-        </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2020/11/08/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-1/">自学Python-基本数据结构(1)</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：基本数据结构.
-                    <a href="/2020/11/08/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-1/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2020-11-08
-                </span>
-                
-                    <span id="/2020/11/08/自学Python-基本数据结构-1/" class="leancloud_visitors" data-flag-title="自学Python-基本数据结构(1)">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/08/自学Python-基本数据结构-1/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
-        </div>
-    
-    
-        <div class="pagination-bottom">
-            <div class="pagination">
-                
-                    <a class="extend prev" rel="prev" href="/page/2/">上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
-                
-            </div>
-        </div>
-    
+    </div>
+
 </div>
 
     </div>
