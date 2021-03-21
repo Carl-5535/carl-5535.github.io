@@ -6,7 +6,7 @@
     <meta name="referrer" content="origin">
     <meta http-equiv="Cache-Control" content="no-transform">
     <meta http-equiv="Cache-Control" content="no-siteapp">
-    <title>分散聚集I/O</title>
+    <title>epoll</title>
 
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/LongCang.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Monda.css">
@@ -32,19 +32,19 @@
     <div class="header">
         <div class="vertical">
             <div class="inner">
-                <h1 class="header-subtitle">分散聚集I/O</h1>
+                <h1 class="header-subtitle">epoll</h1>
                 <div class="header-subinfo">
                     <p class="article-info-text">
                         <span>
-                            <i class="iconfont icon-time"></i> 发表时间：2021-02-21
+                            <i class="iconfont icon-time"></i> 发表时间：2021-03-21
                         </span>
                         
-                            <span id="/2021/02/21/分散聚集I-O/" class="leancloud_visitors" data-flag-title="分散聚集I/O">
+                            <span id="/2021/03/21/epoll/" class="leancloud_visitors" data-flag-title="epoll">
                                 <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
                             </span>
                         
                         <span>
-                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/02/21/分散聚集I-O/"></span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/03/21/epoll/"></span>
                         </span>  
                     </p>                 
                 </div>
@@ -58,41 +58,83 @@
         <div id="article">
     <div class="toc"></div>
     <div class="article-body">
-        <h1 id="分散-聚集I-O"><a href="#分散-聚集I-O" class="headerlink" title="分散/聚集I/O"></a>分散/聚集I/O</h1><p>分散/聚集I/O 是一种可以在单词系统调用中对多个缓冲区输入输出的方法，可以把的一个缓冲区的数据写到单个数据流，也可以把单个数据流读到多个缓冲区中。其命名的原因在于数据会被分散到指定缓冲区向量，或者从指定缓冲区向量中聚集数据。这种输入输出的方法也成为向量I/O。前面所提到的标准读写系统调用可以成为线性I/O</p>
-<p>与线性I/O相比，分散聚集I/O有如下优势：</p>
+        <h1 id="Event-Poll"><a href="#Event-Poll" class="headerlink" title="Event Poll"></a>Event Poll</h1><p>由于poll()和select()的局限，Linux2.6内核引入了event poll(epoll)机制。虽然epoll的实现比poll()和select()要复杂的多，epoll解决了前两个都存在的基本性能问题，并增加了一些新的特性</p>
+<p>对于poll()和select()每次调用时都需要所有被监听的文件描述符列表。内核必须遍历所有被监视的文件描述符、当这个文件描述符列表变得很大时，每次调用都要遍历列表就编程规模上的瓶颈</p>
+<p>epoll把监听注册从实际监听中分离出来，从而结局了这个问题。一个系统调用会初始化epoll上下文，另一个从上下文中加入或删除监视的文件描述符，第三个执行真正的等待事件。</p>
+<h2 id="创建新的epoll示例"><a href="#创建新的epoll示例" class="headerlink" title="创建新的epoll示例"></a>创建新的epoll示例</h2><p>通过epoll_create1()创建epoll上下文：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/epollh&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_create1</span> <span class="params">(<span class="keyword">int</span> flags)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_create</span> <span class="params">(<span class="keyword">int</span> size)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>调用成功时，epoll_create1()会创建新的epoll实例，并返回和该实例关联的文件描述符。这个文件描述符和真正的文件没有关系，仅仅是为了后续调用epoll而创建的</p>
+<p>参数flags支持修改epoll的行为，当前，只有EPOLL_CLOEXEC是个合法的flag,他表示进程被替换时关闭文件描述符</p>
+<p>出错时，返回-1，并设置errno为下列值之一：</p>
+<p>EINVAL : 参数flags非法</p>
+<p>EMFILE : 用户打开的文件数达到上限</p>
+<p>ENFILE : 系统打开的文件数达到上限</p>
+<p>ENOMEN : 内存不足，无法完成本次操作</p>
+<p>epoll_create()时老版本的epoll_create1()的实现，现已废弃。</p>
+<p>epoll的标准调用方式如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> epfd;</span><br><span class="line">epfd = epoll_create1(EPOLL_CLOEXEC);</span><br><span class="line"><span class="keyword">if</span> (epfd &lt; <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    perror (<span class="string">&quot;epoll_creat1);</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>当完成监视后，epoll_create1()返回的文件描述符需要用close()调用关闭</p>
+<h2 id="控制epoll"><a href="#控制epoll" class="headerlink" title="控制epoll"></a>控制epoll</h2><p>epoll_ctl()函数可以向指定的epoll上下文中加入或删除文件描述符：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/epoll.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">poll_ctl</span> <span class="params">(<span class="keyword">int</span> epfd, <span class="keyword">int</span> op, <span class="keyword">int</span> fd, struct epoll_event *event)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>头文件&lt;sys/epoll.h&gt;中定义了epoll_event结构体：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    _u32 events;</span><br><span class="line">    unio</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">void</span> *ptr;</span><br><span class="line">        <span class="keyword">int</span> fd;</span><br><span class="line">        _u32 u32;</span><br><span class="line">        _u64 u64;</span><br><span class="line">    &#125; data;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>epoll_ctl()调用如果执行成功，会控制和文件描述符epfd关联的epoll实例。参数op指定对fd指向的文件所执行的操作。参数event进一步描述epoll更具体的行为</p>
+<p>以下是参数op的有效值：</p>
+<p>EPOLL_CTL_ADD ： 把文件描述符fd所指向的文件添加到epfd指定的epoll监听实例集中，监听event中定义的事件</p>
+<p>EPOLL_CTL_DEL ： 把文件描述符fd所指向的文件冲epfd指定的epoll监听实例集中删除</p>
+<p>EPOLL_CTL_MOD ： 使用event指定的更新事件修改在已有fd上的监听行为</p>
+<p>epoll_events结构体中的events变量列出了在指定文件描述符上要监听的事件。多个事件可以通过位或运算同时指定。以下是events的有效值：</p>
+<p>EPOLLERR ： 文件出错。即使没设置，这个事件也被监听</p>
+<p>EPOLLET ： 在监听文件上开启边缘触发。默认是条件触发</p>
+<p>EPOLLHUP ： 文件被挂起。即使没设置，这个事件也被监听</p>
+<p>EPOLLIN ： 文件为阻塞，可读</p>
+<p>EPOLLONESHOT ： 在事件生成并处理后，文件不会再被监听。必须通过EPOLL_CTL_MOD指定新的事件掩码，以便重新监听文件</p>
+<p>EPOLLOUT ： 文件为阻塞，可写</p>
+<p>EPOLLPRI ： 存在高优先级的带外数据可读</p>
+<p>event_poll 中的data变量是由用户私有使用。当接收到请求事件后，data会被返回给用户。通常用法是把event.data.fd设置为fd,这样可以很容易查看哪个文件描述符触发了事件。</p>
+<p>当成功时，epoll_ctl()返回0。失败时，返回-1，并设置errno为下值：</p>
+<p>EBADF ： epfd不是有效的epoll实例，或者fd不是有效的文件描述符</p>
+<p>EEXIST ： op值设置为EPOLL_CTL_ADD，但fd已经与epfd关联</p>
+<p>EINVAL : epfd不是epoll实例，epfd和fd相同，或op无效</p>
+<p>ENOENT : op值设置为EPOLL_CTL_MOD或EPOLL_CTL_DEL，但是fd没有和epfd关联</p>
+<p>ENFILE : 系统打开的文件数达到上限</p>
+<p>ENOMEN : 内存不足，无法完成本次操作</p>
+<p>EPERM ： fd不支持epoll</p>
+<p>在下面的例子中，在epoll实例epfd中加入fd所指向文件的监听事件，代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span> <span class="title">event</span>;</span></span><br><span class="line"><span class="keyword">int</span> ret;</span><br><span class="line"></span><br><span class="line">event.data.fd = fd;</span><br><span class="line">event.events = EPOLLIN | EPOLLOUT;</span><br><span class="line"></span><br><span class="line">ret = epoll_ctl (epfd, EPOLL_CTL_ADD, fd, &amp;event);</span><br><span class="line"><span class="keyword">if</span> (ret)</span><br><span class="line">&#123;</span><br><span class="line">    perror (<span class="string">&quot;epoll_ctl&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改epfd实例中的fd上的一个监听事件，代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span> <span class="title">event</span>;</span></span><br><span class="line"><span class="keyword">int</span> ret;</span><br><span class="line"></span><br><span class="line">event.data.fd = fd;</span><br><span class="line">event.events = EPOLLIN;</span><br><span class="line"></span><br><span class="line">ret = epoll_ctl (epfd, EPOLL_CTL_MOD, fd, &amp;event);</span><br><span class="line"><span class="keyword">if</span> (ret)</span><br><span class="line">&#123;</span><br><span class="line">    perror (<span class="string">&quot;epoll_ctl&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>相反，从epoll实例中删除在fd上的一个监听事件，代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span> <span class="title">event</span>;</span></span><br><span class="line"><span class="keyword">int</span> ret;</span><br><span class="line"></span><br><span class="line">ret = epoll_ctl (epfd, EPOLL_CTL_DEL, fd, &amp;event);</span><br><span class="line"><span class="keyword">if</span> (ret)</span><br><span class="line">&#123;</span><br><span class="line">    perror (<span class="string">&quot;epoll_ctl&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意，当op设置为EPOLL_CTL_DEL时，由于没有提供事件掩码，event参数可能为NULL，在2.6.9以前的内核中，会检查该参数是否非空，为了和老版本兼容，必须传递一个有效的非空指针，不能只是声明。内核2.6.9版本修复了这个bug</p>
+<h2 id="等待epoll事件"><a href="#等待epoll事件" class="headerlink" title="等待epoll事件"></a>等待epoll事件</h2><p>系统调用epoll_wait()会等待和指定epoll实例关联的文件描述符上的事件：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/epoll.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_wait</span><span class="params">(<span class="keyword">int</span> epfd, struct epoll_event *events, <span class="keyword">int</span> maxevents, <span class="keyword">int</span> timeout)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>当调用epoll_wait()时，等待epoll实例epfd中的文件fd上的事件，时限为timeout毫秒。成功时，events指向描述每个事件的epoll_event结构体的内存，且最多可以有maxevents个事件，返回值是事件个数；出错时，返回-1,并将errno设置为下值：</p>
+<p>EBADF ： epfd是一个无效的文件描述符</p>
+<p>EFAULT ： 进程对events所指向的内存没有写权限</p>
+<p>EINTR ： 系统调用在完成前发生信号中断或超时</p>
+<p>EINVAL ： epfd不是有效的epoll实例，或者maxevents小于或等于0</p>
+<p>如果timeout为0，即使没有事件发生，调用也会立即返回0.如果timeout为-1，调用将一直等待到有事件发生才返回</p>
+<p>当调用返回时，epoll_event结构体中的events变量描述了发生的事件。data变量保留了用户在调用epoll_ctl()前的所有内容</p>
+<p>一个完整的例子如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_EVENTS 64</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span> *<span class="title">events</span>;</span></span><br><span class="line"><span class="keyword">int</span> nr_events, i, epfd;</span><br><span class="line"></span><br><span class="line">events = <span class="built_in">malloc</span> (<span class="keyword">sizeof</span> (struct epoll_event) * MAX_EVENTS);</span><br><span class="line"><span class="keyword">if</span> (!events)</span><br><span class="line">&#123;</span><br><span class="line">    perror (<span class="string">&quot;malloc&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">nr_events = epoll_wait (epfd, events, MAX_EVENTS, <span class="number">-1</span>);</span><br><span class="line"><span class="keyword">if</span> (nr_events &lt; <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    perror (<span class="string">&quot;epoll_wait&quot;</span>);</span><br><span class="line">    <span class="built_in">free</span> (events);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; nr_events; i++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span> (<span class="string">&quot;event = %ld on fd = %d\n&quot;</span>,events[i].events, events[i].data.fd);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">free</span> (events);</span><br></pre></td></tr></table></figure>
+
+<h2 id="边缘触发事件和条件触发事件"><a href="#边缘触发事件和条件触发事件" class="headerlink" title="边缘触发事件和条件触发事件"></a>边缘触发事件和条件触发事件</h2><p>如果epoll_ctrl()的参数event中的events项设置为EPOLLET，fd上的监听方式为边缘触发（ET)，否则为条件触发（LT)</p>
+<p>考虑下面的生产者和消费者在通过UNIX管道通信时的情况</p>
 <ol>
-<li>编码模式更自然</li>
-<li>如果数据本身是分段的，向量IO提供了直观的数据处理方式</li>
-<li>效率更高</li>
-<li>单个向量I/O操作可以取代多个线性I/O操作</li>
-<li>性能更好</li>
-<li>除了减少了发起的系统调用次数，通过内部优化，向量I/O可以比线性I/O提供更好的性能</li>
-<li>支持原子性</li>
-<li>和多个线性I/O操作不同，一个进程可以执行单个向量I/O操作，比秒了和其它进程交叉操作的风险</li>
+<li>生产者向管道写入1KB数据</li>
+<li>消费者在管道上调用epoll_wait()，等待管道上有数据并可读</li>
 </ol>
-<h2 id="readv-和writev"><a href="#readv-和writev" class="headerlink" title="readv()和writev()"></a>readv()和writev()</h2><p>readv()函数从文件描述符fd中读取count个段(一个段即一个iovec结构体)到参数参数iov所指定的缓冲区中：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/uio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">readv</span> <span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> struct iovec *iov, <span class="keyword">int</span> count)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>writev()函数冲参数iov指定的缓冲区中读取count个段的数据，并写入fd中：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/uio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">writev</span> <span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> struct iovec *iov, <span class="keyword">int</span> count)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>除了同时操作多个缓冲区外，readv()函数和writev()函数的功能分别和read()和write()的功能一致</p>
-<p>每个iovec结构体描述一个独立的/物理不连续的缓冲区，我们称其为段：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/uio.h&gt;</span></span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">iovec</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">void</span> *iov_base;</span><br><span class="line">    <span class="keyword">size_t</span> iov_len;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>一组段的集合称为向量。每个段描述了内存中所要读写的缓冲区的地址和长度。</p>
-<p>readv()函数在处理下个缓冲区之前，会填满当前缓冲区的iov_len个字节。</p>
-<p>writev()函数在处理下个缓冲区之前，会把当前缓冲区所有iov_len个字节的数据输出</p>
-<p>这两个函数都会顺序处理向量中的段，从iov[0]开始，一直到iov[count-1]</p>
-<h2 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h2><p>操作成功是，readv()函数和writev()函数分别返回读写的字节数，该字节数应该等于所有count个iov_len的和</p>
-<p>出错时，返回-1并设置errno，设置的errno和read()、write()相同。此外还有另外两种错误场景：</p>
-<ol>
-<li>如果所有count个iov_len的和超出ssize_max，则不会处理任何数据，返回-1，并把errno设置为EINVAL</li>
-<li>count必须大于0，且小于等于IOV_MAX(1024)，如果count为0，则返回0(errno可能设置为EINVAL)。如果超过IOV_MAX，不会处理数据，返回-1，并把errno设置为EINVAL</li>
-</ol>
-<h2 id="writev-示例"><a href="#writev-示例" class="headerlink" title="writev()示例"></a>writev()示例</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/uio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">iovec</span> <span class="title">iov</span>[3];</span></span><br><span class="line">    <span class="keyword">ssize_t</span> nr;</span><br><span class="line">    <span class="keyword">int</span> fd, i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> *buf[] = &#123;</span><br><span class="line">        <span class="string">&quot;The term buccaneer comes from the word boucan.\n&quot;</span>,</span><br><span class="line">        <span class="string">&quot;A boucan is a wooden frame used for cokking meat.\n&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Buccaneer is the West Indies name for a pirate.\n&quot;</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    fd = open (<span class="string">&quot;buccaneer.txt&quot;</span>, O_WRONLY | O_CREAT | O_TRUNC);</span><br><span class="line">    <span class="keyword">if</span> (fd == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror (<span class="string">&quot;open&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        iov[i].iov_base = buf[i];</span><br><span class="line">        iov[i].iov_len = <span class="built_in">strlen</span>(buf[i]) +<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    nr = writev (fd, iov, <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">if</span> (nr == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror (<span class="string">&quot;writev&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span> (<span class="string">&quot;wrote %d bytes\n&quot;</span>, nr);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (close (fd))</span><br><span class="line">    &#123;</span><br><span class="line">        perror (<span class="string">&quot;close&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="readv-示例"><a href="#readv-示例" class="headerlink" title="readv()示例"></a>readv()示例</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/uio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> foo[<span class="number">48</span>], bar[<span class="number">51</span>], baz[<span class="number">49</span>];</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">iovec</span> <span class="title">iov</span>[3];</span></span><br><span class="line">    <span class="keyword">ssize_t</span> nr;</span><br><span class="line">    <span class="keyword">int</span> fd, i;</span><br><span class="line"></span><br><span class="line">    fd = open(<span class="string">&quot;buccaneer.txt&quot;</span>, O_RDONLY);</span><br><span class="line">    <span class="keyword">if</span> (fd == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    iov[<span class="number">0</span>].iov_base = foo;</span><br><span class="line">    iov[<span class="number">0</span>].iov_len = <span class="keyword">sizeof</span>(foo);</span><br><span class="line">    iov[<span class="number">1</span>].iov_base = bar;</span><br><span class="line">    iov[<span class="number">1</span>].iov_len = <span class="keyword">sizeof</span>(bar);</span><br><span class="line">    iov[<span class="number">2</span>].iov_base = baz;</span><br><span class="line">    iov[<span class="number">2</span>].iov_len = <span class="keyword">sizeof</span>(baz);</span><br><span class="line"></span><br><span class="line">    nr = readv (fd,iov,<span class="number">3</span>);</span><br><span class="line">    <span class="keyword">if</span> (nr == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror (<span class="string">&quot;readv&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span> (<span class="string">&quot;%d:%s&quot;</span>, i, (<span class="keyword">char</span>*)iov[i].iov_base);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (close (fd))</span><br><span class="line">    &#123;</span><br><span class="line">        perror (<span class="string">&quot;close&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过条件触发监视时，在步骤2中epoll_wait()会立刻返回，表示管道可读。通过边缘触发监视时，需要在步骤1发生后，步骤2才会返回</p>
+<p>条件触发是默认行为，poll()和select()就是采用这种模式，也是大多数开发者所期望的。边缘触发需要不同的编程解决方案，通常是非阻塞I/O，而且需要仔细检查EAGAIN</p>
 
         <p class="suffix-end">__END__</p>
         <div class="suffix-box">
@@ -102,7 +144,7 @@
             <div class="suffix-box-right">
                 <span class="suffix-box-title">文章作者</span>：Carl Chen
                 <br>
-                <span class="suffix-box-title">文章出处</span>：<a href="/2021/02/21/%E5%88%86%E6%95%A3%E8%81%9A%E9%9B%86I-O/" target="_blank">分散聚集I/O</a>
+                <span class="suffix-box-title">文章出处</span>：<a href="/2021/03/21/epoll/" target="_blank">epoll</a>
                 <br>
                 <span class="suffix-box-title">作者签名</span>：不想秃头的Carl.
                 <br>
@@ -133,11 +175,11 @@
         
         <div class="article-prev-next">
             
-                <a href="/2021/03/21/epoll/" class="prev-prefix">« </a> 上一篇：    <a href="/2021/03/21/epoll/" title="发布于 2021-03-21 05:43">epoll</a>
+                <a href="/2021/03/21/%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84/" class="prev-prefix">« </a> 上一篇：    <a href="/2021/03/21/%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84/" title="发布于 2021-03-21 05:46">内存映射</a>
                 <br>
             
             
-                <a href="/2021/02/21/%E9%AB%98%E7%BA%A7%E6%96%87%E4%BB%B6I-O/" class="next-prefix">» </a> 下一篇：    <a href="/2021/02/21/%E9%AB%98%E7%BA%A7%E6%96%87%E4%BB%B6I-O/" title="发布于 2021-02-21 08:48">高级文件I/O</a>
+                <a href="/2021/02/21/%E5%88%86%E6%95%A3%E8%81%9A%E9%9B%86I-O/" class="next-prefix">» </a> 下一篇：    <a href="/2021/02/21/%E5%88%86%E6%95%A3%E8%81%9A%E9%9B%86I-O/" title="发布于 2021-02-21 08:49">分散聚集I/O</a>
             
         </div>
     </div>

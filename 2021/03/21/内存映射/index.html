@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta name="referrer" content="origin">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>内存映射</title>
+
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/LongCang.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Monda.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/NotoSansSC.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Playball.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/PTMono.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/RobotoSlab.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Rosario.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/UbuntuMono.css">
+
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/post.css">
+    
+        <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/normal.css">
+    
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/jquery-3.4.1.min.js"></script>
+
+<meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Carl������վ" type="application/atom+xml">
+</head>
+<body>
+    <a id="cover"></a>
+    <div id="header">
+    <div class="header">
+        <div class="vertical">
+            <div class="inner">
+                <h1 class="header-subtitle">内存映射</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2021-03-21
+                        </span>
+                        
+                            <span id="/2021/03/21/内存映射/" class="leancloud_visitors" data-flag-title="内存映射">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/03/21/内存映射/"></span>
+                        </span>  
+                    </p>                 
+                </div>
+            </div>
+        </div>
+        <canvas id="articleHeaderCanvas"></canvas>
+    </div>
+</div>
+    <div id="container">
+    <div id="content">
+        <div id="article">
+    <div class="toc"></div>
+    <div class="article-body">
+        <h1 id="储存映射"><a href="#储存映射" class="headerlink" title="储存映射"></a>储存映射</h1><p>除了标准文件I/O，内核还提供了一个接口，支持应用程序将文件映射到内存中，即内存地址和文件数据一一对应。这样开发人员就可以直接通过内存来访问文件，就像操作内存中的数据块一样，甚至可以写入内存数据区，然后通过透明的映射机制将文件写入磁盘</p>
+<h2 id="mmap"><a href="#mmap" class="headerlink" title="mmap()"></a>mmap()</h2><p>mmap()调用请求内核将文件描述符fd所指向的对象的len个字节数据映射到内存中，起始位置从offset开始。如果指定addr,表示优先使用addr作为内存中的起始地址。参数prot指定了访存权限，flags指定了其他操作行为</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">mmap</span> <span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> len, <span class="keyword">int</span> prot, <span class="keyword">int</span> flags, <span class="keyword">int</span> fd, <span class="keyword">off_t</span> offset)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>addr参数告诉内核映射内存文件的最佳地址，但仅仅是作为提示信息，而不是强制性的，大部分用户对该参数传递0.调用返回内存映射区域的真实开始地址</p>
+<p>prot参数描述了对内存区域所请求的访问权限。如果是PROT_NONE，表示无法访问映射区域的页(基本不用)，也可以是以下标志位的比特位或运算值：</p>
+<p>PROT_READ 页可读</p>
+<p>PROT_WRITE 页可写</p>
+<p>PROT_EXEC 页可执行</p>
+<p>prot参数所设置的访问权限不能和打开文件的访问模式冲突。即如果文件只读模式打开，prot不能设置PROT_WRITE</p>
+<p>flag参数描述了内存映射的类型及其一些行为。其值为以下值按位或运算的结果：</p>
+<p>MAP_FIXED : 表示mmap()强制接收参数addr,而不是作为提示信息。如果内核无法映射文件到指定地址，调用会失败。如果地址和长度指定的内存和已有映射有重叠区域，重叠区域的原有内容被丢弃，通过新的内容填充。该选项需要深入了解进程的地址空间，不可移植，因此不鼓励使用</p>
+<p>MAP_PRIVATE : 表示映射区不共享。文件映射采用了写时复制，进程对内存的任何改变不影响真正的文件或其他进程的映射</p>
+<p>MAP_SHARED : 表示和其他映射该文件的进程共享映射内存。该映射区域会受到其他进程写操作的影响</p>
+<p>MAP_SHARED和MAP_PRIVATE必须指定其中的一个，但是不能同时指定</p>
+<p>当映射文件描述符时，文件的引用计数会加1.因此，如果映射文件后关闭文件，进程依然可以访问该文件。当取消映射或进程终止时，对应的文件引用计数会减1</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> *p</span><br><span class="line">p = mmap (<span class="number">0</span>, len, PROT_READ, MAP_SHARED, fd， <span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span> (p == MAP_FAILED)</span><br><span class="line">&#123;</span><br><span class="line">    perror(<span class="string">&quot;mmap&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="页大小"><a href="#页大小" class="headerlink" title="页大小"></a>页大小</h3><p>页是内存管理单元(MMU)的粒度单位。因此，它是内存中允许具有不同权限和行为的最小单元。页是内存映射的基本块，因而也是进程地址空间的基本块</p>
+<p>mmap()系统调用的操作单元是页。参数addr和offset都必须按页大小对齐。也就是说，它们必须是页大小的整数倍</p>
+<p>所以，映射区域是页大小的整数倍。如果调用方提供的len参数没有按页对其，映射区域会一直占满最后一个页，多出来的内存，即最后一个有效字节到映射区域边界这一部分区域，会用0填充。该区域所有读写操作都将返回0.写操作都不会影响文件的最后部分，即使使用MAP_SHARED进行映射，只有最前面len个字节会写到文件中。</p>
+<p>标准POSIX规定，获得页大小的方法是通过sysconf()函数，它将返回一系列系统特定的信息:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">sysconf</span> <span class="params">(<span class="keyword">int</span> name)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>sysconf()调用会返回配置项name值，如果name无效，返回-1.出错时，errno被设置为EINVAL。因为-1对某些项来说是有效值，所以明智的做法是在调用前清空errno，并在调用后检查</p>
+<p>POSIX定义_SC_PAGESIZE(_SC_PAGE_SIZE与其同义)表示页大小，因此获取页大小很简单：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> page_size = sysconf (_SC_PAGESIZE);</span><br></pre></td></tr></table></figure>
+
+<p>Linux也提供了getpagesize()函数来获得页大小：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> page_size = getpagesize();</span><br></pre></td></tr></table></figure>
+
+<p>并不是所有的UNIX系统都支持此函数，POSIX 1003.1-2001弃用了该函数</p>
+<p>页大小是由&lt;asm/pages.h&gt;中的宏PAGE_SIZE定义的。因此第三种获取页大小的方法是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> page_size = PAGE_SIZE;</span><br></pre></td></tr></table></figure>
+
+<p>为了可移植性和代码的兼容性，sysconf()是最好的选择</p>
+<h3 id="返回值和错误码"><a href="#返回值和错误码" class="headerlink" title="返回值和错误码"></a>返回值和错误码</h3><p>成功时，mmap()返回映射区域的地址。失败时，返回MAP_FAILED,并相应设置errno值。mmap()调用，永远不会返回0</p>
+<p>errno可能为：</p>
+<p>EACESS : 指定的文件描述符不是普通文件，或者打开模式和参数prot或flags冲突</p>
+<p>EAGAIN : 文件已通过文件锁锁定</p>
+<p>EBADF : 指定文件描述符非法</p>
+<p>EINVAL : 参数addr、len、off中的一个或多个非法</p>
+<p>ENFILE : 打开文件数达到系统上限</p>
+<p>ENODEV : 文件所在文件系统不支持存储映射</p>
+<p>ENOMEM : 内存不足</p>
+<p>EOVERFLOW : 参数addr+len的结果超过了地址空间大小</p>
+<p>EPERM : 设定了参数PORT_EXEC,但文件系统以不可执行方式挂载</p>
+<h3 id="相关信号"><a href="#相关信号" class="headerlink" title="相关信号"></a>相关信号</h3><p>和映射区域相关的两个信号如下：</p>
+<p>SIGBUS 当进程试图访问一块已经失效的映射区域时，会生成该信号</p>
+<p>SIGSEGV 当进程试图写一块只读的映射区域时，会生成该信号</p>
+<h2 id="munmap"><a href="#munmap" class="headerlink" title="munmap()"></a>munmap()</h2><p>Linux提供了munmap()系统调用，来取消mmap()所创建的映射</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">munmap</span> <span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> len)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>munmap()会消除进程地址空间从addr开始，len字节长的内存中的所有页面映射。一旦映射被消除，之前关联的内存区域就不再有效，如果试图再次访问会生成SIGSEGV信号</p>
+<p>一般来说，传递给munmap()的参数是上次mmap()调用的返回值及其参数len</p>
+<p>成功时,munmap()返回0；失败时返回-1，并设置相应errno值。唯一标准的errno值是EINVAL，它表示一个或多个参数无效</p>
+<h2 id="存储映射实例"><a href="#存储映射实例" class="headerlink" title="存储映射实例"></a>存储映射实例</h2><p>下面是将文件输出到标准输出的例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">sb</span>;</span></span><br><span class="line">    <span class="keyword">off_t</span> len;</span><br><span class="line">    <span class="keyword">char</span> *p;</span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc &lt; <span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span> (<span class="built_in">stderr</span>, <span class="string">&quot;usage: %s &lt;file&gt;\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fd = open (argv[<span class="number">1</span>], O_RDONLY);</span><br><span class="line">    <span class="keyword">if</span> (fd == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror (<span class="string">&quot;open&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (fstat (fd, &amp;sb) == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror (<span class="string">&quot;fstat&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!S_ISREG (sb.st_mode))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span> (<span class="built_in">stderr</span>, <span class="string">&quot;%s is not a file\n&quot;</span>, argv[<span class="number">1</span>]);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    p = mmap (<span class="number">0</span>, sb.st_size, PROT_READ, MAP_SHARED, fd, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (p == MAP_FAILED)</span><br><span class="line">    &#123;</span><br><span class="line">        perror (<span class="string">&quot;mmap&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (close (fd) == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror (<span class="string">&quot;close&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (len = <span class="number">0</span>; len &lt; sb.st_size; len++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">putchar</span> (p[len]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (munmap (p, sb.st_size) == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror (<span class="string">&quot;munmap&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="mmap-的优点"><a href="#mmap-的优点" class="headerlink" title="mmap()的优点"></a>mmap()的优点</h2><p>相对于read()和write()而言，使用mmap()处理文件有很多优点：</p>
+<ul>
+<li>使用read()或write()，需要从用户缓冲区进行数据读写，而使用映射文件进行操作，可以避免多余的数据拷贝操作。</li>
+<li>除了可能潜在页错误，读写映射文件不会带来系统调用和上下文切换的开销，它就像直接操作内存一样简单</li>
+<li>当多个进程把同一个对象映射到内存中时，数据会在所有进程间共享。只读和写共享的映射在全体中都是共享的；私有可写的映射对尚未进行写时拷贝的页是共享的</li>
+<li>映射对象中搜索只需要很简单的指针操作，不需要使用系统调用lseek()</li>
+</ul>
+<p>基于以上理由，mmap()是很多应用的明智选择</p>
+<h2 id="mmap-的不足"><a href="#mmap-的不足" class="headerlink" title="mmap()的不足"></a>mmap()的不足</h2><p>使用mmap()需要注意以下几点：</p>
+<ul>
+<li>由于映射区域的大小总是页的整数倍，因此，文件大小与页大小的整数倍之间有空间浪费。对于小文件，空间浪费比较严重。例如，如果页大小是4KB,一个7字节的映射就会浪费4089字节</li>
+<li>存储映射区域必须在进程地址空间内。对于32位的地址空间，大量的大小不同的映射会导致生成大量的碎片，使得很难找到连续的大片空内存。当然，这个问题在64位地址空间就不是很明显</li>
+<li>创建和维护映射以及相关的内核数据结构有一定的开销。不过，由于mmap()消除了读写时不必要的拷贝，这种开销几乎可以忽略，对于大文件和频繁访问的文件更是如此</li>
+</ul>
+<p>基于以上理由，处理大文件(浪费空间很小)，或者在文件大小恰好被怕个大小整除(没有空间浪费)时，mmap()的优势就会非常显著</p>
+<h2 id="给出映射提示"><a href="#给出映射提示" class="headerlink" title="给出映射提示"></a>给出映射提示</h2><p>Linux提供了系统调用madvise()，进程对自己期望如何访问映射区域给内核一些提示信息。内核会根据此优化自己的行为，尽量更好的利用映射区域。</p>
+<p>调用madvise()会告诉内核该如何对于起始地址为addr，长度为len的内存映射区域进行操作</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">madvise</span> <span class="params">(<span class="keyword">void</span> *addr, sizet len, <span class="keyword">int</span> advice)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果len为0，内核将把提示信息应用于所有起始地址为addr的映射。参数advice表示提示信息，可以是下列值之一：</p>
+<p>MADV_NORMAL 对指定的内存区域，应用没有特殊提示，按正常方式操作</p>
+<p>MADV_RANDOM 应用将以随机访问方式，访问指定范围的页</p>
+<p>MADV_SEQUENTIAL 应用期望从低地址到高地址顺序访问指定范围的页</p>
+<p>MADV_WILLNEED 应用期望会很快访问指定范围的页</p>
+<p>MADV_DONTNEED 应用在短期内不会访问指定范围内的页</p>
+
+        <p class="suffix-end">__END__</p>
+        <div class="suffix-box">
+            <div class="suffix-box-left">
+                <img src="https://cdn.jsdelivr.net/gh/Carl-5535/images@master/head/carl.jpg" alt="Carl Chen">
+            </div>
+            <div class="suffix-box-right">
+                <span class="suffix-box-title">文章作者</span>：Carl Chen
+                <br>
+                <span class="suffix-box-title">文章出处</span>：<a href="/2021/03/21/%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84/" target="_blank">内存映射</a>
+                <br>
+                <span class="suffix-box-title">作者签名</span>：不想秃头的Carl.
+                <br>
+                <span class="suffix-box-title">关于主题</span>：<a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+                <br>
+                <span class="suffix-box-title">版权声明</span>：文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+                <br>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+    <div class="article-footer">
+        
+            <div class="category">
+                分类：
+                
+                    <a href="/category/linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/">linux系统编程</a>
+                
+            </div>
+        
+        
+            <div class="tag">
+                标签：
+                
+                    <a href="/tags/linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/">linux系统编程</a>
+                
+            </div>
+        
+        <div class="article-prev-next">
+            
+                <a href="/2021/03/21/%E6%96%87%E4%BB%B6%E6%8F%90%E7%A4%BA/" class="prev-prefix">« </a> 上一篇：    <a href="/2021/03/21/%E6%96%87%E4%BB%B6%E6%8F%90%E7%A4%BA/" title="发布于 2021-03-21 05:51">文件提示</a>
+                <br>
+            
+            
+                <a href="/2021/03/21/epoll/" class="next-prefix">» </a> 下一篇：    <a href="/2021/03/21/epoll/" title="发布于 2021-03-21 05:43">epoll</a>
+            
+        </div>
+    </div>
+    
+    <div class="article-comments">
+        <div class="comments-title">
+            评论列表
+        </div>
+        <div class="comments-content">
+        </div>
+    </div>
+
+</div>
+
+    </div>
+</div>
+    <div id="footer"></div>
+    <div id="sidebar">
+    <div class="menu-wrap" style="display:none;">
+        <nav class="menu">
+            <div class="menu-introduce"> 
+                <div class="introduce-avatar"></div> 
+                <div class="introduce-info"> 
+                    <div class="introduce-user"><span></span></div>        
+                </div> 
+            </div> 
+            <div class="menu-list">
+                <ul></ul> 
+            </div> 
+            <div class="menu-link"></div> 
+        </nav>
+        <button class="menu-button-close"></button>
+        <div class="morph-shape" id="morph-shape" data-morph-open="M-7.312,0H15c0,0,66,113.339,66,399.5C81,664.006,15,800,15,800H-7.312V0z;M-7.312,0H100c0,0,0,113.839,0,400c0,264.506,0,400,0,400H-7.312V0z">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 800" preserveAspectRatio="none">
+                <path d="M-7.312,0H0c0,0,0,113.839,0,400c0,264.506,0,400,0,400h-7.312V0z"/>
+            </svg>
+        </div>
+    </div>
+    <button class="menu-button-open">MENU</button>
+    <div class="menu-cover"></div>
+</div>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/search.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/iscroll.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/instantsearch.min.js"></script>
+<div class="search-window">
+    <div class="search-content">
+        <div class="search-content-icon">
+            <i class="iconfont icon-search"></i>
+        </div>
+        <div id="search-input" class="search-input"></div>
+    </div>
+
+    <div class="search-scroll">
+        <div class="search-result">
+            <div id="search-stats" class="search-stats"></div>
+            <div id="search-hits"></div>
+            <div id="search-pagination" class="search-pagination"></div>
+        </div>
+    </div>
+
+    <span class="search-close-icon">
+        <i class="iconfont icon-close"></i>
+    </span>
+</div>
+    <div id="tools">
+    <div class="progressbar-top"></div>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/APlayer.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/APlayer.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/Meting.min.js"></script>
+    <meting-js id="3778678" lrcshow="false" server="netease" type="playlist" fixed="true" autoplay="false" loop="all" order="random" preload="auto" volume="0.67" mutex="true"></meting-js>
+    <div class="wrap-right"></div>
+    <div class="loading"></div>
+</div>
+    <script>
+    window.config = {
+        GitHubUserName     : 'first19326',
+        GitHubRepositories : 'Hexo-LiveForCode',
+
+        BlogUser      : 'Carl Chen',
+        BlogAvatar    : 'https://cdn.jsdelivr.net/gh/Carl-5535/images@master/head/carl.jpg',
+        BlogStartDate : '2020-11-08',
+
+        WebsiteTitleBlur         : '(◍´꒳`◍) Hi, Live For Code',
+        WebsiteTitleBlurTimeOut  : 500,
+        WebsiteTitleFocus        : '(*´∇｀*) 欢迎回来!',
+        WebsiteTitleFocusTimeOut : 1000,
+        WebsiteFavicon           : 'https://cdn.jsdelivr.net/gh/Carl-5535/images@master/head/ harmonica.png',
+
+        ProgressBar: {
+            id       : 'topProgressBar',
+            color    : '#77B6FF',
+            height   : '2px',
+            duration : 0.2
+        },
+
+        Loading: {
+            rebound: {
+                tension  : 16,
+                friction : 5
+            },
+            spinner: {
+                id     : 'spinner',
+                radius : 90,
+                sides  : 3,
+                depth  : 4,
+                colors : {
+                    background : '#F0F0F0',
+                    stroke     : '#272633',
+                    base       : '',
+                    child      : '#272633'
+                },
+                alwaysForward : true,
+                restAt        : 0.5,
+                renderBase    : false
+            }
+        },
+
+        HomeHeaderAnimationRendered : true,
+        HomeHeaderAnimation         : {
+            radius      : 15,
+            density     : 0.2,
+            color       : 'rgba(255, 255, 255, .2)',
+            clearOffset : 0.3
+        },
+
+        ArticleHeaderAnimationRendered : false,
+        ArticleHeaderAnimation         : {
+            triW                  : 14,
+            triH                  : 20,
+            neighbours            : [
+                
+                    'side',
+                
+                    'top',
+                
+                    'bottom',
+                
+            ],
+            speedTrailAppear      : 0.1,
+            speedTrailDisappear   : 0.1,
+            speedTriOpen          : 1,
+            trailMaxLength        : 30,
+            trailIntervalCreation : 100,
+            delayBeforeDisappear  : 2,
+            colors                : [
+                
+                    '#96EDA6',
+                
+                    '#5BC6A9',
+                
+                    '#38668C',
+                
+                    '#374D84',
+                
+                    '#BED5CB',
+                
+                    '#62ADC6',
+                
+                    '#8EE5DE',
+                
+                    '#304E7B',
+                
+            ]
+        },
+
+        BackAnimationRendered          : true,
+        IEBrowserBackAnimationRendered : false,
+        BackAnimation                  : {
+            colorSaturation  : '60%',
+            colorBrightness  : '50%',
+            colorAlpha       : 0.5,
+            colorCycleSpeed  : 5,
+            verticalPosition : 'random',
+            horizontalSpeed  : 200,
+            ribbonCount      : 3,
+            strokeSize       : 0,
+            parallaxAmount   : -0.2,
+            animateSections  : true
+        },
+
+        HomeHeaderImage : [
+            
+                'https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/header/home.jpg',
+            
+        ],
+        HomeBannerText  : '代码大部分时间是给人看的，只是偶尔运行一下',
+
+        ArticleHeaderImage : [
+            
+                'https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/header/article.jpg',
+            
+        ],
+
+        OtherBannerText  : '',
+
+        MenuList : [
+            
+                {
+                    name   : '首页',
+                    href   : '/',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '标签',
+                    href   : '/tag',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '分类',
+                    href   : '/category',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '归档',
+                    href   : '/archive',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '关于',
+                    href   : '/about',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '搜索',
+                    href   : '',    
+                    target : '',
+                    class  : 'search'
+                },
+            
+                {
+                    name   : '留言板',
+                    href   : '/comment',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '友情链接',
+                    href   : '/friend',    
+                    target : '',
+                    class  : ''
+                },
+            
+        ],
+        MenuLink : [
+            
+                {
+                    icon : 'icon-weibo', 
+                    url  : ''
+                },
+            
+                {
+                    icon : 'icon-wechat', 
+                    url  : ''
+                },
+            
+                {
+                    icon : 'icon-qq', 
+                    url  : ''
+                },
+            
+                {
+                    icon : 'icon-github', 
+                    url  : 'https://github.com/carl-5535'
+                },
+            
+        ],
+
+        FooterStyle : 2,
+        BottomText  : {
+            icon    : 'like-fill',
+            left    : '人生若只如初见',
+            right   : '何事秋风悲画扇'
+        },
+        ThemeInfo   : false,
+
+        ConsoleList : [
+            
+                [
+                    
+                        'Based on cnblogs theme SimpleMemory.',
+                    
+                        '',
+                    
+                ],
+            
+                [
+                    
+                        'SimpleMemory Author:',
+                    
+                        'BNDong',
+                    
+                ],
+            
+                [
+                    
+                        'Theme:',
+                    
+                        'LiveForCode',
+                    
+                ],
+            
+        ],
+
+        FontIconExtend : "",
+
+        Donate : {
+            paypal  : '',
+            bitcoin : '',
+            alipay  : 'https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/donate/alipay.png',
+            wechat  : 'https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/donate/wechat.png'
+        },
+
+        Code : {
+            style : 'normal'
+        },  
+
+        Search : {
+            applicationID : 'XMCRUTQ6TF',
+            apiKey        : 'd163ebeca12b61ad7721462381cea6a9',
+            indexName     : 'BLOG',
+            hits          : {
+                page : 10
+            },
+            labels        : {
+                placeholder : '搜索',
+                empty       : '未发现与 「${query}」 相关的内容',
+                stats       : '${hits} 条相关条目，使用了 ${time} 毫秒',
+            }
+        }, 
+
+        Valine : {
+            switch         : true,
+            el             : '.comments-content',
+            appId          : 'OVvCeGMH5XNm42b1wuU52HK0-gzGzoHsz',
+            appKey         : 'TltgUJqHRaoztnKrsy4SeYTW',
+            placeholder    : '你是我一生只会遇见一次的惊喜...',
+            avatar         : 'mm',
+            meta           : 'nick,mail,link',
+            requiredFields : 'nick,mail',
+            pageSize       : 5,
+            lang           : 'zh-cn',
+            visitor        : true,
+            enableQQ       : true
+        },
+
+        Tocbot : {
+            switch                : true,
+            tocSelector           : '.toc',
+            contentSelector       : '.article-body',
+            headingSelector       : 'h1, h2, h3, h4, h5',
+            headingsOffset        : 0,
+            scrollSmooth          : true,
+            scrollSmoothOffset    : -5,
+            positionFixedSelector : '.toc',
+            positionFixedClass    : 'toc-fixed',
+            fixedSidebarOffset    : '',
+        },
+
+        Require : {
+            baseUrl     : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/",
+            waitSeconds : 100
+        },
+
+        Meting : {
+            id       : "3778678", 
+            lrcshow  : false, 
+            server   : "netease", 
+            type     : "playlist", 
+            fixed    : true, 
+            autoplay : false, 
+            loop     : "all", 
+            order    : "random", 
+            preload  : "auto", 
+            volume   : 0.67, 
+            mutex    : true
+        },
+
+        LazyLoad : {
+            default : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/website/lazyload.svg"
+        },
+  
+
+        Style : {
+            aplayer          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/APlayer.css",
+            archive          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/archive.css",
+            donate           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/donate.css",
+            fancybox         : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/jquery.fancybox.css",
+            footer           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/footer.css",
+            iconfont         : "https://at.alicdn.com/t/font_1546312_l3yohatebw.css",
+            index            : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/index.css",
+            menuBubble       : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/menu-bubble.css",
+            page             : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/page.css",
+            post             : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/post.css",
+            search           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/search.css",
+            tocbot           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/tocbot.css",
+            normal           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/normal.css",
+            night            : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/night.css",
+            clipboard        : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/clipboard.css"
+        },
+
+        Script: {
+            aplayer          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/APlayer.min.js",
+            config           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/require.config.js",
+            index            : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/index.js",
+            instantSearch    : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/instantsearch.min.js",
+            jQuery           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/jquery-3.4.1.min.js",
+            loading          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/loading.js",
+            meting           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/Meting.min.js",
+            iscroll          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/iscroll.js",
+            require          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/require.min.js"
+        },
+
+        Font: {
+            LongCang   : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/LongCang.css",
+            Monda      : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Monda.css",
+            NotoSansSC : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/NotoSansSC.css",
+            Playball   : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Playball.css",
+            PTMono     : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/PTMono.css",
+            RobotoSlab : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/RobotoSlab.css",
+            Rosario    : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Rosario.css",
+            UbuntuMono : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/UbuntuMono.css"
+        },
+
+        Suffix : {
+            about : '不想秃头的Carl.'
+        },
+            
+        Theme : {
+            url  : 'https://github.com/first19326/Hexo-LiveForCode',
+            name : 'Hexo - Live For Code'
+        }  
+    };
+</script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/index.js"></script>
+</body>
+</html>

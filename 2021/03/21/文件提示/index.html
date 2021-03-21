@@ -6,7 +6,7 @@
     <meta name="referrer" content="origin">
     <meta http-equiv="Cache-Control" content="no-transform">
     <meta http-equiv="Cache-Control" content="no-siteapp">
-    <title>Live For Code</title>
+    <title>文件提示</title>
 
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/LongCang.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Monda.css">
@@ -17,185 +17,122 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Rosario.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/UbuntuMono.css">
 
-    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/index.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/post.css">
+    
+        <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/normal.css">
+    
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/jquery-3.4.1.min.js"></script>
+
 <meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Carl������վ" type="application/atom+xml">
 </head>
 <body>
     <a id="cover"></a>
     <div id="header">
-    <div class="header" >
+    <div class="header">
         <div class="vertical">
             <div class="inner">
-                <h1 class="header-title"></h1>
-                <h2 class="header-description" id="hitokoto"></h2>
-                <h3 class="header-info" id="hitokotoAuthor"></h3>
-                <!--
-                <h1 class="header-subtitle"></h1>
-                <p class="header-subinfo"></p>
-                -->
+                <h1 class="header-subtitle">文件提示</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2021-03-21
+                        </span>
+                        
+                            <span id="/2021/03/21/文件提示/" class="leancloud_visitors" data-flag-title="文件提示">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/03/21/文件提示/"></span>
+                        </span>  
+                    </p>                 
+                </div>
             </div>
         </div>
-        <a class="scroll-down" href="javascript:;" target="_self" data-offset="-45">
-            <span class="hidden">Scroll Down</span>
-            <i class="scroll-down-icon iconfont icon-return"></i>
-        </a>
+        <canvas id="articleHeaderCanvas"></canvas>
     </div>
 </div>
     <div id="container">
     <div id="content">
-        <div class="articles">
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2020/11/10/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-2/">自学Python-语句(2)</a>
-                
+        <div id="article">
+    <div class="toc"></div>
+    <div class="article-body">
+        <h1 id="普通文件I-O提示"><a href="#普通文件I-O提示" class="headerlink" title="普通文件I/O提示"></a>普通文件I/O提示</h1><p>Linux提供了两个接口，可以给出提示信息：posix_fadvise()和readahead()</p>
+<h2 id="posix-fadvise"><a href="#posix-fadvise" class="headerlink" title="posix_fadvise()"></a>posix_fadvise()</h2><p>正如他的名字那样，posix_fadvise()函数可以给出提示信息</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">posix_fadvise</span> <span class="params">(<span class="keyword">int</span> fd, <span class="keyword">off_t</span> offset, <span class="keyword">off_t</span> len, <span class="keyword">int</span> advice)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>调用posix_fadvise()会向内核提供在文件fd的[offset, offset+len)区间内的操作提示。如果len为0，则会适用于区间[offset, length of file]。最常见的用法是设置len和offset为0，使得提示可以应用于整个文件</p>
+<p>advice的可用选项和madvise()类似，必须是以下值之一：</p>
+<p>POSIX_FADV_NORMAL 对指定的内存区域，应用没有特殊提示，按正常方式操作</p>
+<p>POSIX_FADV_RANDOM 应用将以随机访问方式，访问指定范围的页</p>
+<p>POSIX_FADV_SEQUENTIAL 应用期望从低地址到高地址顺序访问指定范围的页</p>
+<p>POSIX_FADV_WILLNEED 应用期望会很快访问指定范围的页</p>
+<p>POSIX_FADV_DONTNEED 应用在短期内不会访问指定范围内的页</p>
+<p>成功时返回0，失败返回-1，并设置errno为下值之一：</p>
+<p>EBADF 文件描述符非法</p>
+<p>EINVAL 参数advice非法，文件描述符指向一个管道，或者设置的选项无法应用到指定的文件</p>
+<h2 id="readahead"><a href="#readahead" class="headerlink" title="readahead()"></a>readahead()</h2><p>posix_fadvise()是在Linux内核2.6中新加入的系统调用。在此之前，readahead()可以完成和posix_fadvise()使用POSIX_FADV_WILLNEED选项同样的功能。和posix_fadvise()不同的是，readahead()是Linux所特有的</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _GNU_SOURCE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">readahead</span> <span class="params">(<span class="keyword">int</span> fd, <span class="keyword">off64_t</span> offset, <span class="keyword">size_t</span> count)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>readahead()调用把fd所表示文件的映射区域[offset, offset+count)读到页缓存中</p>
+<p>成功时返回0，失败返回-1，并设置errno为下值之一：</p>
+<p>EBADF 文件描述符非法</p>
+<p>EINVAL 文件描述符对应的文件不支持预读</p>
+
+        <p class="suffix-end">__END__</p>
+        <div class="suffix-box">
+            <div class="suffix-box-left">
+                <img src="https://cdn.jsdelivr.net/gh/Carl-5535/images@master/head/carl.jpg" alt="Carl Chen">
             </div>
-            <div class="article-abstract">
-                
-                    摘要：条件语句.
-                    <a href="/2020/11/10/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-2/">阅读全文</a>
-                
+            <div class="suffix-box-right">
+                <span class="suffix-box-title">文章作者</span>：Carl Chen
+                <br>
+                <span class="suffix-box-title">文章出处</span>：<a href="/2021/03/21/%E6%96%87%E4%BB%B6%E6%8F%90%E7%A4%BA/" target="_blank">文件提示</a>
+                <br>
+                <span class="suffix-box-title">作者签名</span>：不想秃头的Carl.
+                <br>
+                <span class="suffix-box-title">关于主题</span>：<a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+                <br>
+                <span class="suffix-box-title">版权声明</span>：文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+                <br>
             </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2020-11-10
-                </span>
-                
-                    <span id="/2020/11/10/自学Python-语句-2/" class="leancloud_visitors" data-flag-title="自学Python-语句(2)">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/10/自学Python-语句-2/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
+            <div style="clear: both;"></div>
         </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-1/">自学Python-语句(1)</a>
+    </div>
+    <div class="article-footer">
+        
+            <div class="category">
+                分类：
+                
+                    <a href="/category/linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/">linux系统编程</a>
                 
             </div>
-            <div class="article-abstract">
+        
+        
+            <div class="tag">
+                标签：
                 
-                    摘要：print语句、import语句、赋值语句.
-                    <a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E8%AF%AD%E5%8F%A5-1/">阅读全文</a>
+                    <a href="/tags/linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/">linux系统编程</a>
                 
             </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2020-11-09
-                </span>
-                
-                    <span id="/2020/11/09/自学Python-语句-1/" class="leancloud_visitors" data-flag-title="自学Python-语句(1)">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/09/自学Python-语句-1/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
+        
+        <div class="article-prev-next">
+            
+            
+                <a href="/2021/03/21/%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84/" class="next-prefix">» </a> 下一篇：    <a href="/2021/03/21/%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84/" title="发布于 2021-03-21 05:46">内存映射</a>
+            
         </div>
+    </div>
     
-        <div class="article">
-            <div class="article-title">
-                <a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-3/">自学Python-基本数据结构(3)</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：集合.
-                    <a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-3/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2020-11-09
-                </span>
-                
-                    <span id="/2020/11/09/自学Python-基本数据结构-3/" class="leancloud_visitors" data-flag-title="自学Python-基本数据结构(3)">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/09/自学Python-基本数据结构-3/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
+    <div class="article-comments">
+        <div class="comments-title">
+            评论列表
         </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-2/">自学Python-基本数据结构(2)</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：字典.
-                    <a href="/2020/11/09/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-2/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2020-11-09
-                </span>
-                
-                    <span id="/2020/11/09/自学Python-基本数据结构-2/" class="leancloud_visitors" data-flag-title="自学Python-基本数据结构(2)">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/09/自学Python-基本数据结构-2/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
+        <div class="comments-content">
         </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2020/11/08/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-1/">自学Python-基本数据结构(1)</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：基本数据结构.
-                    <a href="/2020/11/08/%E8%87%AA%E5%AD%A6Python-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-1/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2020-11-08
-                </span>
-                
-                    <span id="/2020/11/08/自学Python-基本数据结构-1/" class="leancloud_visitors" data-flag-title="自学Python-基本数据结构(1)">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2020/11/08/自学Python-基本数据结构-1/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
-        </div>
-    
-    
-        <div class="pagination-bottom">
-            <div class="pagination">
-                
-                    <a class="extend prev" rel="prev" href="/page/3/">上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
-                
-            </div>
-        </div>
-    
+    </div>
+
 </div>
 
     </div>
