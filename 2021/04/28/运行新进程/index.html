@@ -6,7 +6,7 @@
     <meta name="referrer" content="origin">
     <meta http-equiv="Cache-Control" content="no-transform">
     <meta http-equiv="Cache-Control" content="no-siteapp">
-    <title>文件提示</title>
+    <title>运行新进程</title>
 
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/LongCang.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Monda.css">
@@ -32,19 +32,19 @@
     <div class="header">
         <div class="vertical">
             <div class="inner">
-                <h1 class="header-subtitle">文件提示</h1>
+                <h1 class="header-subtitle">运行新进程</h1>
                 <div class="header-subinfo">
                     <p class="article-info-text">
                         <span>
-                            <i class="iconfont icon-time"></i> 发表时间：2021-03-21
+                            <i class="iconfont icon-time"></i> 发表时间：2021-04-28
                         </span>
                         
-                            <span id="/2021/03/21/文件提示/" class="leancloud_visitors" data-flag-title="文件提示">
+                            <span id="/2021/04/28/运行新进程/" class="leancloud_visitors" data-flag-title="运行新进程">
                                 <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
                             </span>
                         
                         <span>
-                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/03/21/文件提示/"></span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/04/28/运行新进程/"></span>
                         </span>  
                     </p>                 
                 </div>
@@ -58,27 +58,77 @@
         <div id="article">
     <div class="toc"></div>
     <div class="article-body">
-        <h1 id="普通文件I-O提示"><a href="#普通文件I-O提示" class="headerlink" title="普通文件I/O提示"></a>普通文件I/O提示</h1><p>Linux提供了两个接口，可以给出提示信息：posix_fadvise()和readahead()</p>
-<h2 id="posix-fadvise"><a href="#posix-fadvise" class="headerlink" title="posix_fadvise()"></a>posix_fadvise()</h2><p>正如他的名字那样，posix_fadvise()函数可以给出提示信息</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">posix_fadvise</span> <span class="params">(<span class="keyword">int</span> fd, <span class="keyword">off_t</span> offset, <span class="keyword">off_t</span> len, <span class="keyword">int</span> advice)</span></span>;</span><br></pre></td></tr></table></figure>
+        <h1 id="运行新进程"><a href="#运行新进程" class="headerlink" title="运行新进程"></a>运行新进程</h1><p>在UNIX中，把程序载入内存并执行程序映像的操作与创建新进程的操作是分离的。一次系统调用会把二进制程序加载到内存中，替换地址空间原来的内容，并开始执行。这个过程称为”执行(executing)”一个新的程序，是通过一系列exec系统调用来完成的</p>
+<p>同时，另一个不同的系统调用是用于创建一个新的进程，它基本上相当于辅助其父进程。通常情况下，新进程会立即执行新的程序。创建新进程的操作称为派生(fork)，是系统调用fork()来完成这个功能</p>
+<p>在新进程中执行一个新的程序需要两个步骤：</p>
+<ol>
+<li>创建一个新进程</li>
+<li>通过exec系统调用把二进制程序加载到该进程中</li>
+</ol>
+<h2 id="exec系统调用"><a href="#exec系统调用" class="headerlink" title="exec系统调用"></a>exec系统调用</h2><p>不存在单一的exec函数，而是基于单个系统调用，由一系列的exec函数构成。</p>
+<h3 id="execl"><a href="#execl" class="headerlink" title="execl()"></a>execl()</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execl</span> <span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">const</span> <span class="keyword">char</span> *arg, ...)</span></span>;</span><br></pre></td></tr></table></figure>
 
-<p>调用posix_fadvise()会向内核提供在文件fd的[offset, offset+len)区间内的操作提示。如果len为0，则会适用于区间[offset, length of file]。最常见的用法是设置len和offset为0，使得提示可以应用于整个文件</p>
-<p>advice的可用选项和madvise()类似，必须是以下值之一：</p>
-<p>POSIX_FADV_NORMAL 对指定的内存区域，应用没有特殊提示，按正常方式操作</p>
-<p>POSIX_FADV_RANDOM 应用将以随机访问方式，访问指定范围的页</p>
-<p>POSIX_FADV_SEQUENTIAL 应用期望从低地址到高地址顺序访问指定范围的页</p>
-<p>POSIX_FADV_WILLNEED 应用期望会很快访问指定范围的页</p>
-<p>POSIX_FADV_DONTNEED 应用在短期内不会访问指定范围内的页</p>
-<p>成功时返回0，失败返回-1，并设置errno为下值之一：</p>
-<p>EBADF 文件描述符非法</p>
-<p>EINVAL 参数advice非法，文件描述符指向一个管道，或者设置的选项无法应用到指定的文件</p>
-<h2 id="readahead"><a href="#readahead" class="headerlink" title="readahead()"></a>readahead()</h2><p>posix_fadvise()是在Linux内核2.6中新加入的系统调用。在此之前，readahead()可以完成和posix_fadvise()使用POSIX_FADV_WILLNEED选项同样的功能。和posix_fadvise()不同的是，readahead()是Linux所特有的</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _GNU_SOURCE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">readahead</span> <span class="params">(<span class="keyword">int</span> fd, <span class="keyword">off64_t</span> offset, <span class="keyword">size_t</span> count)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>execl()调用会把path所指路径的映像载入内存，替换当前进程的映像。参数arg是它的第一个参数。省略号表示可变长度的参数列表——execl()函数是可变参数，也就是说后续还有一个或者多个参数，参数列表必须以NULL结尾,如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ret;</span><br><span class="line">ret = execl (<span class="string">&quot;/bin/vi&quot;</span>, <span class="string">&quot;vi&quot;</span>, <span class="literal">NULL</span>);</span><br><span class="line"><span class="keyword">if</span> (ret == <span class="number">-1</span>)</span><br><span class="line">&#123;</span><br><span class="line">    perror (<span class="string">&quot;execl&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>readahead()调用把fd所表示文件的映射区域[offset, offset+count)读到页缓存中</p>
-<p>成功时返回0，失败返回-1，并设置errno为下值之一：</p>
-<p>EBADF 文件描述符非法</p>
-<p>EINVAL 文件描述符对应的文件不支持预读</p>
+<p>通常情况下，execl()不会返回。调用成功时，会跳转到新的程序入口点，而刚刚运行的代码是不再存在于进程的地址空间中。错误时execl()会返回-1，并设置响应的errno</p>
+<p>成功的execl()调用不仅改变了地址空间和进程映像，还改变了一些其他属性：</p>
+<ul>
+<li>所有挂起的信号都会丢失</li>
+<li>捕捉到的所有信号都会还原为默认处理方式</li>
+<li>丢弃所有内存锁</li>
+<li>大多数线程的属性会被还原成默认值</li>
+<li>重置大多数进程相关的统计信息</li>
+<li>清空和进程相关的统计信息</li>
+<li>清空和进程内存地址空间相关的所有数据，包括所有映射文件</li>
+<li>清空所有只存在于用户空间的数据，包括C库的一些功能</li>
+</ul>
+<p>但是有些属性还是没有改变：pid、父进程pid、优先级、所属的用户和组</p>
+<p>通常打开的文件描述符也通过exec继承下来。这意味着如果新进程知道原进程所打开的文件描述符，他就可以访问这些文件。但是，这通常并不是期望的行为，所以实际操作中一般会在调用exec前关闭打开的文件，当然，也可以通过fcntl()，让内核自动完成关闭操作</p>
+<h3 id="exec系的其他函数"><a href="#exec系的其他函数" class="headerlink" title="exec系的其他函数"></a>exec系的其他函数</h3><p>除了execl()外，还有其他5个函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unnistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execlp</span> <span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *file, <span class="keyword">const</span> <span class="keyword">char</span> *arg, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execle</span> <span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">const</span> <span class="keyword">char</span> *arg, ..., <span class="keyword">char</span> *<span class="keyword">const</span> envp[])</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execv</span> <span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">char</span> *<span class="keyword">const</span> argv[])</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execvp</span> <span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *file, <span class="keyword">char</span> *<span class="keyword">const</span> argv[])</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execve</span> <span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">char</span> *<span class="keyword">const</span> argv[], <span class="keyword">char</span> *<span class="keyword">const</span> envp[])</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>l和v分别表示参数是以列表形式还是数组形式，p表示会在用户的绝对目录下查找可执行文件，e表示会为新进程提供新的环境变量</p>
+<p>在Linux中，exec系函数只有一个真正的系统调用，其他都是基于该系统调用在C库封装的函数，由于处理变长参数的系统调用难以实现，而且用户的路径只存在于用户空间，所以execve是唯一的系统调用，其原型和用户调用完全相同</p>
+<h3 id="错误返回值"><a href="#错误返回值" class="headerlink" title="错误返回值"></a>错误返回值</h3><p>成功时，exec系函数不会返回。失败时返回-1，并把errno设为以下值之一：</p>
+<p>E2BIG : 参数列表或环境变量长度过长</p>
+<p>EACCESS : 没有在path所指定路径的查找权限；path所指向的文件不是一个普通文件；目标文件不可执行；path或文件所位于的文件系统以不可执行方式挂载</p>
+<p>EFAULT : 给定指针非法</p>
+<p>EIO : 底层IO错误</p>
+<p>EISDIR : 路径path的最后一部分或者路径解释器是个目录</p>
+<p>ELOOP : 系统在解析path时遇到太多的符号连接</p>
+<p>EMFILE : 调用进程打开的文件数达到进程上限</p>
+<p>ENFILE : 打开文件达到系统上限</p>
+<p>ENOENT : 目标文件不是一个有效的二进制可执行文件或其他体系结构上的可执行文件</p>
+<p>ENOMEM : 内核内存不足，无法执行新的程序</p>
+<p>ENOTDIR : path中除最后名称外的其中某个部分不是目录</p>
+<p>EPERM : path或文件所在的文件系统以没有sudo权限的用户挂在，而且用户不是root用户，path或文件的suid或sgid位被设置</p>
+<p>ETXTBSY : 目标目录或文件被另一个进程以可写方式打开</p>
+<h2 id="fork-系统调用"><a href="#fork-系统调用" class="headerlink" title="fork()系统调用"></a>fork()系统调用</h2><p>通过fork()系统调用，可以创建一个和当前进程映像一样的进程：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">fork</span> <span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>当fork()调用成功时，会创建一个新的进程，他几乎与调用fork()的进程完全相同。这两个进程都会继续运行，调用者进程从fork()返回后，还是照常运行</p>
+<p>新进程被称为“子进程”，原进程被称为“父进程”。在子进程中，成功的fork()调用会返回0.在父进程中会返回子进程的pid。除了一些本质性区别，父进程和子进程之间在其他各个方面都完全相同：</p>
+<ul>
+<li>子进程的pid是重新分配的，与父进程不同。</li>
+<li>子进程的ppid会设置为父进程的pid</li>
+<li>子进程中的资源统计信息会清零</li>
+<li>所有挂起的信号都会清除，也不会被子进程继承</li>
+<li>所有文件锁也都不会被子进程继承</li>
+</ul>
+<h3 id="返回值和错误码"><a href="#返回值和错误码" class="headerlink" title="返回值和错误码"></a>返回值和错误码</h3><p>出错时，不会创建子进程，fork()返回-1，并相应设置errno值。errno有两种可能，包括三种不同的含义：</p>
+<p>EAGAIN : 内核申请资源时失败或达到了RLIMIT_NPROC设置的资源限制</p>
+<p>ENOMEM : 内核内存不足，无法满足所请求的操作</p>
+<h3 id="fork-系统调用的用法"><a href="#fork-系统调用的用法" class="headerlink" title="fork()系统调用的用法"></a>fork()系统调用的用法</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pid_t</span> pid;</span><br><span class="line">pid = fork();</span><br><span class="line"><span class="keyword">if</span> (pid &gt;<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span> (<span class="string">&quot;I am the parent of pid = %d\n&quot;</span>, pid);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (!pid)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span> (<span class="string">&quot;I am the child!\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">-1</span>)</span><br><span class="line">&#123;</span><br><span class="line">    perror (<span class="string">&quot;fork&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最常见的fork()用法是创建一个新的进程，载入新的二进制映像——类似shell为用户创建一个新进程，或一个进程创建一个辅助进程。</p>
+<p>首先，该进程创建了一个进程，而这个进程会执行一个新的二进制可执行文件的映像。像这种“派生/执行”的方式很常见：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pid_t</span> pid;</span><br><span class="line"></span><br><span class="line">pid = fork();</span><br><span class="line"><span class="keyword">if</span> (pid == <span class="number">-1</span>)</span><br><span class="line">&#123;</span><br><span class="line">    perror (<span class="string">&quot;fork&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*the child */</span></span><br><span class="line"><span class="keyword">if</span> (!pid)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *args[] = &#123; <span class="string">&quot;windlass&quot;</span>, <span class="literal">NULL</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line"></span><br><span class="line">    ret = execv (<span class="string">&quot;/bin/windlass&quot;</span>,args);</span><br><span class="line">    <span class="keyword">if</span> (ret == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror (<span class="string">&quot;execv&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span> (EXIT_FAILUER);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="写时复制-WOC"><a href="#写时复制-WOC" class="headerlink" title="写时复制(WOC)"></a>写时复制(WOC)</h3><p>由于大量的fork()创建之后都会紧跟着执行exec,因此把整个父进程地址空间中的内容复制到子进程的地址空间往往只是纯属浪费：如果子进程立刻执行一个新的二进制可执行文件的映像，他先前的地址空间就会被交换出去</p>
+<p>因此，可以采用一种称为写时复制的技术，它通过允许父进程和子进程最初共享相同的页面来工作。这些共享页面标记为写时复制，这意味着如果任何一个进程写入共享页面，那么就创建共享页面的副本。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Carl-5535/images@master/blog/%E5%86%99%E6%97%B6%E5%A4%8D%E5%88%B6.gif" alt="写时复制"></p>
+<p>例如，假设子进程试图修改包含部分堆栈的页面，并且设置为写时复制。操作系统会创建这个页面的副本，将其映射到子进程的地址空间。然后，子进程会修改复制的页面，而不是属于父进程的页面。显然，当使用写时复制技术时，仅复制任何一进程修改的页面，所有未修改的页面可以由父进程和子进程共享。</p>
 
         <p class="suffix-end">__END__</p>
         <div class="suffix-box">
@@ -88,7 +138,7 @@
             <div class="suffix-box-right">
                 <span class="suffix-box-title">文章作者</span>：Carl Chen
                 <br>
-                <span class="suffix-box-title">文章出处</span>：<a href="/2021/03/21/%E6%96%87%E4%BB%B6%E6%8F%90%E7%A4%BA/" target="_blank">文件提示</a>
+                <span class="suffix-box-title">文章出处</span>：<a href="/2021/04/28/%E8%BF%90%E8%A1%8C%E6%96%B0%E8%BF%9B%E7%A8%8B/" target="_blank">运行新进程</a>
                 <br>
                 <span class="suffix-box-title">作者签名</span>：不想秃头的Carl.
                 <br>
@@ -119,11 +169,11 @@
         
         <div class="article-prev-next">
             
-                <a href="/2021/04/28/%E8%BF%9B%E7%A8%8B/" class="prev-prefix">« </a> 上一篇：    <a href="/2021/04/28/%E8%BF%9B%E7%A8%8B/" title="发布于 2021-04-28 11:38">进程</a>
+                <a href="/2021/04/28/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/" class="prev-prefix">« </a> 上一篇：    <a href="/2021/04/28/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/" title="发布于 2021-04-28 11:41">进程调度</a>
                 <br>
             
             
-                <a href="/2021/03/21/%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84/" class="next-prefix">» </a> 下一篇：    <a href="/2021/03/21/%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84/" title="发布于 2021-03-21 05:46">内存映射</a>
+                <a href="/2021/04/28/%E8%BF%9B%E7%A8%8B/" class="next-prefix">» </a> 下一篇：    <a href="/2021/04/28/%E8%BF%9B%E7%A8%8B/" title="发布于 2021-04-28 11:38">进程</a>
             
         </div>
     </div>

@@ -6,7 +6,7 @@
     <meta name="referrer" content="origin">
     <meta http-equiv="Cache-Control" content="no-transform">
     <meta http-equiv="Cache-Control" content="no-siteapp">
-    <title>归档</title>
+    <title>进程调度</title>
 
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/LongCang.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Monda.css">
@@ -17,99 +17,123 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Rosario.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/UbuntuMono.css">
 
-    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/archive.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/post.css">
+    
+        <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/normal.css">
+    
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/jquery-3.4.1.min.js"></script>
+
 <meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Carl������վ" type="application/atom+xml">
 </head>
 <body>
     <a id="cover"></a>
     <div id="header">
-    <div class="header" >
+    <div class="header">
         <div class="vertical">
             <div class="inner">
-                <h1 class="header-title"></h1>
-                <h2 class="header-description" id="hitokoto"></h2>
-                <h3 class="header-info" id="hitokotoAuthor"></h3>
-                <!--
-                <h1 class="header-subtitle"></h1>
-                <p class="header-subinfo"></p>
-                -->
+                <h1 class="header-subtitle">进程调度</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2021-04-28
+                        </span>
+                        
+                            <span id="/2021/04/28/进程调度/" class="leancloud_visitors" data-flag-title="进程调度">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/04/28/进程调度/"></span>
+                        </span>  
+                    </p>                 
+                </div>
             </div>
         </div>
-        <a class="scroll-down" href="javascript:;" target="_self" data-offset="-45">
-            <span class="hidden">Scroll Down</span>
-            <i class="scroll-down-icon iconfont icon-return"></i>
-        </a>
+        <canvas id="articleHeaderCanvas"></canvas>
     </div>
 </div>
     <div id="container">
     <div id="content">
-          
-    <div class="articles-year">
-        <h2>2021</h2>
-        <ul class="list">
-            
-                <li>
-                    <span class="date">2021/02/01</span>
-                    <a href="/2021/02/01/%E6%A0%87%E5%87%86I-O/" title="标准I/O">    
-                        <span>标准I/O</span>
-                    </a>
-                </li>
-            
-                <li>
-                    <span class="date">2021/02/01</span>
-                    <a href="/2021/02/01/I-O%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" title="I/O多路复用">    
-                        <span>I/O多路复用</span>
-                    </a>
-                </li>
-            
-                <li>
-                    <span class="date">2021/02/01</span>
-                    <a href="/2021/02/01/%E6%96%87%E4%BB%B6I-O/" title="文件I/O">    
-                        <span>文件I/O</span>
-                    </a>
-                </li>
-            
-                <li>
-                    <span class="date">2021/01/20</span>
-                    <a href="/2021/01/20/zip%E5%91%BD%E4%BB%A4/" title="zip命令">    
-                        <span>zip命令</span>
-                    </a>
-                </li>
-            
-                <li>
-                    <span class="date">2021/01/20</span>
-                    <a href="/2021/01/20/FOTA%E5%8D%87%E7%BA%A7%E5%8C%85%E7%AD%BE%E5%90%8D/" title="FOTA升级包签名">    
-                        <span>FOTA升级包签名</span>
-                    </a>
-                </li>
-            
-                <li>
-                    <span class="date">2021/01/20</span>
-                    <a href="/2021/01/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E4%BA%8C%E5%8F%89%E6%A0%91/" title="数据结构-二叉树">    
-                        <span>数据结构-二叉树</span>
-                    </a>
-                </li>
-            
-                <li>
-                    <span class="date">2021/01/20</span>
-                    <a href="/2021/01/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E6%A0%91/" title="数据结构-树">    
-                        <span>数据结构-树</span>
-                    </a>
-                </li>
-            
-        </ul>
+        <div id="article">
+    <div class="toc"></div>
+    <div class="article-body">
+        <h1 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h1><p>进程调度器是个内核子系统，其功能是把有限的处理器资源分配给系统中的各个进程。决定哪个进程可以运行、何时运行、运行多久是进程调度器的基本功能</p>
+<p>在单处理机上，如果系统能交错的运行多个进程，从用户角度似乎是同时运行多个进程，就称该操作系统是“多任务”的。在多处理机上，多任务操作系统支持进程真正在不同处理器上并行执行</p>
+<p>多任务操作系统可以分为两大类：协同式和抢占式。Linux实现了抢占式，调度器决定某个进程何时停止运行，而由另一个进程运行，这种中止正在运行的进程而由另一个进程运行的行为称作“抢占”，进程在被抢占前所能运行的时间称为“时间片”</p>
+<p>当前Linux使用的调度器称为“完全公平调度器”，这个名称源于该调度器采用了“公平入队”策略，公平入队是一个调度算法，对竞争进程采取公平访问资源的策略</p>
+<h2 id="时间片"><a href="#时间片" class="headerlink" title="时间片"></a>时间片</h2><p>进程调度器分配给进程的时间片对于系统的全局行为和性能而言，是至关重要的。如果时间片太长，降低了并发运行，用户会感到明显的延迟；相反，如果时间片太短，大量的时间浪费在了进程调度上</p>
+<p>Linux的完全公平调度器，以一种怪异的方式解决“时间片大小”这一难题：不用时间片</p>
+<h2 id="I-O约束型进程和处理器约束型进程"><a href="#I-O约束型进程和处理器约束型进程" class="headerlink" title="I/O约束型进程和处理器约束型进程"></a>I/O约束型进程和处理器约束型进程</h2><p>一直消耗完所有可用时间片的进程称为“处理器约束型进程”。这类进程需要获取大量CPU资源，会消耗掉调度器分配的全部CPU。最简单的例子是如下的一个无限循环：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">    ;</span><br></pre></td></tr></table></figure>
+
+<p>相反，多数时间出于阻塞状态等待资源的进程称为“I/O约束型进程”</p>
+<p>两者的区别在于：处理器约束的应用期望会获取尽可能长的时间片，尽快完成任务；I/O约束型应用不需要很长的时间片，如果调度器能够优先执行，则会受益；这类应用，在阻塞后越快被唤醒就可以调越多的I/O请求，应用就能更好地利用系统硬件资源</p>
+<p>平衡这两种应用的不同需求难如登天，而且，大多数应用是混合约束型：有些进程是I/O约束型，有些进程则是处理器约束型</p>
+<h2 id="抢占式调度"><a href="#抢占式调度" class="headerlink" title="抢占式调度"></a>抢占式调度</h2><p>在传统UNIX进程调度中，内核会给所有就绪进程分配一个时间片。当进程消耗完其时间片，内核就会挂起该进程，开始运行另一个进程。如果系统没有就绪进程，内核就会给消耗完时间片的进程重新分配时间片，并再次运行这些进程。因此，进程在创建或终止时分别进入和退出就绪进程列表，阻塞在I/O，或者被唤醒，这个过程反复执行</p>
+<p>通过这种方式，所有的进程最后都有机会运行。这种行为方式制定了UNIX调度中没有明确指出但非常重要的规则：所有进程都必须运行</p>
+<h2 id="完全公平调度器-CFS"><a href="#完全公平调度器-CFS" class="headerlink" title="完全公平调度器(CFS)"></a>完全公平调度器(CFS)</h2><p>完全公平调度器引入了一种非常不同的算法、称为公平调度，它消除了时间片作为处理器访问分配单元，相反地，它给每个进程分配了处理器的时间比例。算法很简单：CFS在最初给N个进程分配1/N的处理器时间。然后CFS通过优先级权衡每个进程的比例，调整分配，默认的优先级是0，权值是1，则比例不变。优先级的值越小，优先级越高，权值越高</p>
+<h3 id="目标延迟"><a href="#目标延迟" class="headerlink" title="目标延迟"></a>目标延迟</h3><p>要确定每个进程真正的执行时间，万确公平调度器需要把比例划分成一个固定的周期。该周期称为“目标延迟”，它表示系统的调度延迟。假设“目标延迟”设置为20ms，存在两个优先级相同的可运行进程，CFS会先执行一个进程10ms再执行另一个程序10ms，如此不断重复，如果有五个优先级相同的进程，则每个执行4ms</p>
+<h3 id="最小粒度"><a href="#最小粒度" class="headerlink" title="最小粒度"></a>最小粒度</h3><p>当有200个可运行进，如果目标延迟是20ms，那么每个进程只有100微秒，考虑到频繁切换进程导致的“切换开销”，CFS引入了另一个关键因素：最小粒度</p>
+<p>“最小粒度”是指任一进程所运行的时间长的基准值。所有进程不管分配到的处理器比例是多少，都至少运行最小粒度的时间（除非被阻塞）</p>
+
+        <p class="suffix-end">__END__</p>
+        <div class="suffix-box">
+            <div class="suffix-box-left">
+                <img src="https://cdn.jsdelivr.net/gh/Carl-5535/images@master/head/carl.jpg" alt="Carl Chen">
+            </div>
+            <div class="suffix-box-right">
+                <span class="suffix-box-title">文章作者</span>：Carl Chen
+                <br>
+                <span class="suffix-box-title">文章出处</span>：<a href="/2021/04/28/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/" target="_blank">进程调度</a>
+                <br>
+                <span class="suffix-box-title">作者签名</span>：不想秃头的Carl.
+                <br>
+                <span class="suffix-box-title">关于主题</span>：<a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+                <br>
+                <span class="suffix-box-title">版权声明</span>：文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+                <br>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
     </div>
-
-
-    <div class="pagination-bottom">
-        <div class="pagination">
+    <div class="article-footer">
+        
+            <div class="category">
+                分类：
+                
+                    <a href="/category/linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/">linux系统编程</a>
+                
+            </div>
+        
+        
+            <div class="tag">
+                标签：
+                
+                    <a href="/tags/linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/">linux系统编程</a>
+                
+            </div>
+        
+        <div class="article-prev-next">
             
-                <a class="extend prev" rel="prev" href="/archive/2021/">上一页</a><a class="page-number" href="/archive/2021/">1</a><span class="page-number current">2</span>
+                <a href="/2021/04/28/%E7%BB%88%E6%AD%A2%E8%BF%9B%E7%A8%8B/" class="prev-prefix">« </a> 上一篇：    <a href="/2021/04/28/%E7%BB%88%E6%AD%A2%E8%BF%9B%E7%A8%8B/" title="发布于 2021-04-28 11:42">终止进程</a>
+                <br>
+            
+            
+                <a href="/2021/04/28/%E8%BF%90%E8%A1%8C%E6%96%B0%E8%BF%9B%E7%A8%8B/" class="next-prefix">» </a> 下一篇：    <a href="/2021/04/28/%E8%BF%90%E8%A1%8C%E6%96%B0%E8%BF%9B%E7%A8%8B/" title="发布于 2021-04-28 11:40">运行新进程</a>
             
         </div>
     </div>
+    
+    <div class="article-comments">
+        <div class="comments-title">
+            评论列表
+        </div>
+        <div class="comments-content">
+        </div>
+    </div>
+
+</div>
 
     </div>
 </div>

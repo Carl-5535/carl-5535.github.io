@@ -6,7 +6,7 @@
     <meta name="referrer" content="origin">
     <meta http-equiv="Cache-Control" content="no-transform">
     <meta http-equiv="Cache-Control" content="no-siteapp">
-    <title>归档</title>
+    <title>进程</title>
 
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/LongCang.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Monda.css">
@@ -17,99 +17,130 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Rosario.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/UbuntuMono.css">
 
-    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/archive.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/post.css">
+    
+        <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/normal.css">
+    
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/jquery-3.4.1.min.js"></script>
+
 <meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Carl������վ" type="application/atom+xml">
 </head>
 <body>
     <a id="cover"></a>
     <div id="header">
-    <div class="header" >
+    <div class="header">
         <div class="vertical">
             <div class="inner">
-                <h1 class="header-title"></h1>
-                <h2 class="header-description" id="hitokoto"></h2>
-                <h3 class="header-info" id="hitokotoAuthor"></h3>
-                <!--
-                <h1 class="header-subtitle"></h1>
-                <p class="header-subinfo"></p>
-                -->
+                <h1 class="header-subtitle">进程</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2021-04-28
+                        </span>
+                        
+                            <span id="/2021/04/28/进程/" class="leancloud_visitors" data-flag-title="进程">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/04/28/进程/"></span>
+                        </span>  
+                    </p>                 
+                </div>
             </div>
         </div>
-        <a class="scroll-down" href="javascript:;" target="_self" data-offset="-45">
-            <span class="hidden">Scroll Down</span>
-            <i class="scroll-down-icon iconfont icon-return"></i>
-        </a>
+        <canvas id="articleHeaderCanvas"></canvas>
     </div>
 </div>
     <div id="container">
     <div id="content">
-          
-    <div class="articles-year">
-        <h2>2021</h2>
-        <ul class="list">
-            
-                <li>
-                    <span class="date">2021/02/01</span>
-                    <a href="/2021/02/01/%E6%A0%87%E5%87%86I-O/" title="标准I/O">    
-                        <span>标准I/O</span>
-                    </a>
-                </li>
-            
-                <li>
-                    <span class="date">2021/02/01</span>
-                    <a href="/2021/02/01/I-O%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" title="I/O多路复用">    
-                        <span>I/O多路复用</span>
-                    </a>
-                </li>
-            
-                <li>
-                    <span class="date">2021/02/01</span>
-                    <a href="/2021/02/01/%E6%96%87%E4%BB%B6I-O/" title="文件I/O">    
-                        <span>文件I/O</span>
-                    </a>
-                </li>
-            
-                <li>
-                    <span class="date">2021/01/20</span>
-                    <a href="/2021/01/20/zip%E5%91%BD%E4%BB%A4/" title="zip命令">    
-                        <span>zip命令</span>
-                    </a>
-                </li>
-            
-                <li>
-                    <span class="date">2021/01/20</span>
-                    <a href="/2021/01/20/FOTA%E5%8D%87%E7%BA%A7%E5%8C%85%E7%AD%BE%E5%90%8D/" title="FOTA升级包签名">    
-                        <span>FOTA升级包签名</span>
-                    </a>
-                </li>
-            
-                <li>
-                    <span class="date">2021/01/20</span>
-                    <a href="/2021/01/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E4%BA%8C%E5%8F%89%E6%A0%91/" title="数据结构-二叉树">    
-                        <span>数据结构-二叉树</span>
-                    </a>
-                </li>
-            
-                <li>
-                    <span class="date">2021/01/20</span>
-                    <a href="/2021/01/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E6%A0%91/" title="数据结构-树">    
-                        <span>数据结构-树</span>
-                    </a>
-                </li>
-            
-        </ul>
+        <div id="article">
+    <div class="toc"></div>
+    <div class="article-body">
+        <h1 id="程序、进程和线程"><a href="#程序、进程和线程" class="headerlink" title="程序、进程和线程"></a>程序、进程和线程</h1><p>程序(program)是指编译过的、可执行的二进制代码，保存在存储介质如磁盘上，不运行。规模很大的二进制程序集可以称为应用</p>
+<p>进程(process)是指正在运行的程序，包括二进制镜像，加载到内存中，还涉及很多其他方面:虚拟内存实例、内核资源打开的文件、安全上下文以及一个或多个线程</p>
+<p>线程(thread)是进程内的活动单元。每个线程包含自己的虚拟存储器，包括栈、进程状态如寄存器，以及指令指针</p>
+<p>在单线程的进程中，进程即线程</p>
+<h2 id="进程ID"><a href="#进程ID" class="headerlink" title="进程ID"></a>进程ID</h2><p>每个进程都由一个唯一的标识符表示，即进程ID，简称pid。系统保证在任意时刻pid都是唯一的</p>
+<p>空闲进程(idle process)即当没有其他进程运行时，内核所运行的进程——其pid为0。再启动后，内核运行的第一个进程为init进程，其pid为1</p>
+<p>如果用户没有显式告诉内核要运行哪个程序，内核会尝试四个可执行文件，顺序如下：</p>
+<ol>
+<li>/sbin/init</li>
+<li>/etc/init</li>
+<li>/bin/init</li>
+<li>/bin/sh</li>
+</ol>
+<h3 id="分配进程ID"><a href="#分配进程ID" class="headerlink" title="分配进程ID"></a>分配进程ID</h3><p>缺省情况下，内核将进程ID最大值设置为32768，这是为了和老的UNIX系统兼容，因为这些系统使用了有符号16位数来表示进程ID。系统管理员可以通过修改/proc/sys/kernel/pid_max把这个值设置成更大的值，但是会牺牲一些兼容性</p>
+<p>内核分配进程ID是以严格的线性方式执行的。如果当前pid的最大值是17，那么分配给新进程的pid就为18，即使当新进程开始运行时pid为17的进程已经不再运行了。内核分配的pid值到达了/proc/sys/kernel/pid_max之后，才会重用以前已经分配过的pid值</p>
+<p>所以内核不保证长时间进程ID的唯一性，但短时间内是稳定且唯一的</p>
+<h3 id="进程体系"><a href="#进程体系" class="headerlink" title="进程体系"></a>进程体系</h3><p>创建新进程的那个进程称为父进程，而新进程被称为子进程。每个进程都是由其他进程创建的(除了init进程)，因此每个子进程都有一个父进程。这种关系保存在每个进程的父进程ID号(ppid)中</p>
+<p>每个进程都有属于某个用户和某个组。这种从属关系可以用来实现访问控制。对于内核来书，用户和组都不过是些整数值。通过/etc/passwd和/etc/group这两个文件，这些整数被映射成人们易读的方式。每个子进程都继承了父进程的用户和组</p>
+<p>每个进程都是某个进程组的伊普芬，进程组表示的是该进程和其他子进程之间的关系，和前面提到的用户和组的概念不同。子进程通常属于其父进程所在的那个进程组。所有和管道相关的命令都是同一个进程组，进程组这个概念使得在管道上的进程之间发送信号或者获取信息变得很容易，同样，也适用于管道中的子进程</p>
+<h3 id="pid-t"><a href="#pid-t" class="headerlink" title="pid_t"></a>pid_t</h3><p>从编程角度看，进程ID是由数据类型pid_t来表示的，pid_t在头文件&lt;sys/types.h&gt;中定义。pid_t对应的具体C语言类型是与机器的体系结构相关的，并且在任何C语言标准中都没定义它。但是，在Linux中，pid_t通常定义为C语言的int类型</p>
+<h3 id="获取进程ID和父进程ID"><a href="#获取进程ID和父进程ID" class="headerlink" title="获取进程ID和父进程ID"></a>获取进程ID和父进程ID</h3><p>系统调用getpid()会返回调用进程的进程ID：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">getpid</span> <span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>系统调用getppid()会返回调用进程的父进程ID：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">getppid</span> <span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+        <p class="suffix-end">__END__</p>
+        <div class="suffix-box">
+            <div class="suffix-box-left">
+                <img src="https://cdn.jsdelivr.net/gh/Carl-5535/images@master/head/carl.jpg" alt="Carl Chen">
+            </div>
+            <div class="suffix-box-right">
+                <span class="suffix-box-title">文章作者</span>：Carl Chen
+                <br>
+                <span class="suffix-box-title">文章出处</span>：<a href="/2021/04/28/%E8%BF%9B%E7%A8%8B/" target="_blank">进程</a>
+                <br>
+                <span class="suffix-box-title">作者签名</span>：不想秃头的Carl.
+                <br>
+                <span class="suffix-box-title">关于主题</span>：<a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+                <br>
+                <span class="suffix-box-title">版权声明</span>：文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+                <br>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
     </div>
-
-
-    <div class="pagination-bottom">
-        <div class="pagination">
+    <div class="article-footer">
+        
+            <div class="category">
+                分类：
+                
+                    <a href="/category/linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/">linux系统编程</a>
+                
+            </div>
+        
+        
+            <div class="tag">
+                标签：
+                
+                    <a href="/tags/linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/">linux系统编程</a>
+                
+            </div>
+        
+        <div class="article-prev-next">
             
-                <a class="extend prev" rel="prev" href="/archive/2021/">上一页</a><a class="page-number" href="/archive/2021/">1</a><span class="page-number current">2</span>
+                <a href="/2021/04/28/%E8%BF%90%E8%A1%8C%E6%96%B0%E8%BF%9B%E7%A8%8B/" class="prev-prefix">« </a> 上一篇：    <a href="/2021/04/28/%E8%BF%90%E8%A1%8C%E6%96%B0%E8%BF%9B%E7%A8%8B/" title="发布于 2021-04-28 11:40">运行新进程</a>
+                <br>
+            
+            
+                <a href="/2021/03/21/%E6%96%87%E4%BB%B6%E6%8F%90%E7%A4%BA/" class="next-prefix">» </a> 下一篇：    <a href="/2021/03/21/%E6%96%87%E4%BB%B6%E6%8F%90%E7%A4%BA/" title="发布于 2021-03-21 05:51">文件提示</a>
             
         </div>
     </div>
+    
+    <div class="article-comments">
+        <div class="comments-title">
+            评论列表
+        </div>
+        <div class="comments-content">
+        </div>
+    </div>
+
+</div>
 
     </div>
 </div>
