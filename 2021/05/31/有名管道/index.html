@@ -6,7 +6,7 @@
     <meta name="referrer" content="origin">
     <meta http-equiv="Cache-Control" content="no-transform">
     <meta http-equiv="Cache-Control" content="no-siteapp">
-    <title>Live For Code</title>
+    <title>有名管道</title>
 
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/LongCang.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Monda.css">
@@ -17,325 +17,169 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Rosario.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/UbuntuMono.css">
 
-    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/index.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/post.css">
+    
+        <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/normal.css">
+    
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/jquery-3.4.1.min.js"></script>
+
 <meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Carl������վ" type="application/atom+xml">
 </head>
 <body>
     <a id="cover"></a>
     <div id="header">
-    <div class="header" >
+    <div class="header">
         <div class="vertical">
             <div class="inner">
-                <h1 class="header-title"></h1>
-                <h2 class="header-description" id="hitokoto"></h2>
-                <h3 class="header-info" id="hitokotoAuthor"></h3>
-                <!--
-                <h1 class="header-subtitle"></h1>
-                <p class="header-subinfo"></p>
-                -->
+                <h1 class="header-subtitle">有名管道</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2021-05-31
+                        </span>
+                        
+                            <span id="/2021/05/31/有名管道/" class="leancloud_visitors" data-flag-title="有名管道">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/05/31/有名管道/"></span>
+                        </span>  
+                    </p>                 
+                </div>
             </div>
         </div>
-        <a class="scroll-down" href="javascript:;" target="_self" data-offset="-45">
-            <span class="hidden">Scroll Down</span>
-            <i class="scroll-down-icon iconfont icon-return"></i>
-        </a>
+        <canvas id="articleHeaderCanvas"></canvas>
     </div>
 </div>
     <div id="container">
     <div id="content">
-        <div class="articles">
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2021/05/31/%E4%BF%A1%E5%8F%B7%E9%87%8F/">信号量</a>
-                
+        <div id="article">
+    <div class="toc"></div>
+    <div class="article-body">
+        <h1 id="有名管道FIFO"><a href="#有名管道FIFO" class="headerlink" title="有名管道FIFO"></a>有名管道FIFO</h1><p>无名管道只能用于具有亲缘关系的进程之间，这大大的限制了管道的使用，有名管道的出现突破了这种限制，它可以使互不相关的两个进程实现彼此通信。该管道可以通过路径名来指出，并且在文件系统中是可见的。在建立管道之后，两个进程就可以把它当作普通文件一样进行读写操作。</p>
+<p>值得注意的是，FIFO的读总是从开始处返回数据，写则是添加到末尾，不支持lseek()等文件定位操作</p>
+<p>有名管道可以使用mkfifo()创建，该函数类似open()，可以指定管道的路径和打开模式</p>
+<p>在创建管道成功以后，就可以使用open()、read()和write()这些函数了。与普通文件的开发设置一样，对于为读而打开的管道可以在open()中设置O_RDONLY，对于为写而打开的管道可在open()中设置O_WRONLY，不同的是阻塞问题。在管道的读写中会出现阻塞的可能，这里的非阻塞标志可以在open()中设定为O_NONBLOCK。下面分别对阻塞打开和非阻塞打开的读写进行分析：</p>
+<p>对于读进程：</p>
+<ul>
+<li>若该管道是阻塞打开，且当前FIFO中没有数据，则对读进程而言将一直阻塞到有数据写入</li>
+<li>若该管道是非阻塞打开，则不论FIFO内是否有数据，读进程都会立即执行读操作。如果没有数据则立即返回0</li>
+</ul>
+<p>对于写进程：</p>
+<ul>
+<li>若该管道是阻塞打开，则写操作一直阻塞到数据可以写入</li>
+<li>若该管道是非阻塞打开而不能写入全部数据，则部分写入或调用失败</li>
+</ul>
+<h2 id="mkfifo"><a href="#mkfifo" class="headerlink" title="mkfifo()"></a>mkfifo()</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/state.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkfifo</span> <span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">mode_t</span> mode)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>mode:</p>
+<p>O_RDONLY : 读管道</p>
+<p>O_WRONLY : 写管道</p>
+<p>O_RDWR : 读写管道</p>
+<p>O_NONBLOCK : 非阻塞</p>
+<p>O_CREAT : 如果不存在则创建，并用第三个参数设置权限</p>
+<p>O_EXCL : 如果使用O_CREAT时文件存在，返回错误消息</p>
+<p>出错时的errno如下：</p>
+<table>
+<thead>
+<tr>
+<th>erron</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>EACCESS</td>
+<td>参数filename所指定的目录无可执行权限</td>
+</tr>
+<tr>
+<td>EEXIST</td>
+<td>参数filename所指定的文件已存在</td>
+</tr>
+<tr>
+<td>ENAMETOOLONG</td>
+<td>参数filename的路径名称太长</td>
+</tr>
+<tr>
+<td>ENOENT</td>
+<td>参数filename包含的目录不存在</td>
+</tr>
+<tr>
+<td>ENOSPC</td>
+<td>文件系统的剩余空间不足</td>
+</tr>
+<tr>
+<td>ENOTDIR</td>
+<td>参数filename路径中的目录存在但却非真正的目录</td>
+</tr>
+<tr>
+<td>EROFS</td>
+<td>参数filename指定文件存在于只读文件系统内</td>
+</tr>
+</tbody></table>
+<p>写管道：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;limits.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MYFIFO  <span class="meta-string">&quot;./myfifo&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_BUFFER_SIZE PIPE_BUF</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line">    <span class="keyword">char</span> buf[MAX_BUFFER_SIZE] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> nwrite;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc &lt;= <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span> (<span class="string">&quot;Usage: ./fifo_write string\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">sscanf</span>(argv[<span class="number">1</span>], <span class="string">&quot;%s&quot;</span>, buf);</span><br><span class="line"></span><br><span class="line">    fd = open (MYFIFO, O_WRONLY);</span><br><span class="line">    <span class="keyword">if</span> (fd == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span> (<span class="string">&quot;Open fifo file error\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((nwrite = write (fd, buf, MAX_BUFFER_SIZE)) &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span> (<span class="string">&quot;Write &#x27;%s&#x27; to FIFO\n&quot;</span>, buf);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>读管道：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;limits.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MYFIFO  <span class="meta-string">&quot;./myfifo&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_BUFFER_SIZE PIPE_BUF</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line">    <span class="keyword">char</span> buf[MAX_BUFFER_SIZE] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> nwrite;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (access(MYFIFO, F_OK) == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> ((mkfifo (MYFIFO, <span class="number">0666</span>) &lt; <span class="number">0</span>) &amp;&amp; (errno != EEXIST))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span> (<span class="string">&quot;Cannot creat fifo file\n&quot;</span>);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        &#125; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fd = open (MYFIFO, O_RDONLY);</span><br><span class="line">    <span class="keyword">if</span> (fd == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span> (<span class="string">&quot;Open fifo file error\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span> (buf));</span><br><span class="line">        <span class="keyword">if</span> ((nwrite = read (fd, buf, MAX_BUFFER_SIZE)) &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span> (<span class="string">&quot;Read &#x27;%s&#x27; from FIFO\n&quot;</span>, buf);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        <p class="suffix-end">__END__</p>
+        <div class="suffix-box">
+            <div class="suffix-box-left">
+                <img src="https://cdn.jsdelivr.net/gh/Carl-5535/images@master/head/carl.jpg" alt="Carl Chen">
             </div>
-            <div class="article-abstract">
-                
-                    摘要：进程间通信-信号量
-                    <a href="/2021/05/31/%E4%BF%A1%E5%8F%B7%E9%87%8F/">阅读全文</a>
-                
+            <div class="suffix-box-right">
+                <span class="suffix-box-title">文章作者</span>：Carl Chen
+                <br>
+                <span class="suffix-box-title">文章出处</span>：<a href="/2021/05/31/%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93/" target="_blank">有名管道</a>
+                <br>
+                <span class="suffix-box-title">作者签名</span>：不想秃头的Carl.
+                <br>
+                <span class="suffix-box-title">关于主题</span>：<a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+                <br>
+                <span class="suffix-box-title">版权声明</span>：文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+                <br>
             </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2021-05-31
-                </span>
-                
-                    <span id="/2021/05/31/信号量/" class="leancloud_visitors" data-flag-title="信号量">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/05/31/信号量/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
+            <div style="clear: both;"></div>
         </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2021/05/31/%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/">共享内存</a>
+    </div>
+    <div class="article-footer">
+        
+            <div class="category">
+                分类：
+                
+                    <a href="/category/linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/">linux系统编程</a>
                 
             </div>
-            <div class="article-abstract">
+        
+        
+            <div class="tag">
+                标签：
                 
-                    摘要：进程间通信-共享内存
-                    <a href="/2021/05/31/%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/">阅读全文</a>
+                    <a href="/tags/linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/">linux系统编程</a>
                 
             </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2021-05-31
-                </span>
-                
-                    <span id="/2021/05/31/共享内存/" class="leancloud_visitors" data-flag-title="共享内存">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/05/31/共享内存/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
+        
+        <div class="article-prev-next">
+            
+                <a href="/2021/05/31/%E4%BF%A1%E5%8F%B7/" class="prev-prefix">« </a> 上一篇：    <a href="/2021/05/31/%E4%BF%A1%E5%8F%B7/" title="发布于 2021-05-31 09:34">信号</a>
+                <br>
+            
+            
+                <a href="/2021/05/31/%E7%AE%A1%E9%81%93/" class="next-prefix">» </a> 下一篇：    <a href="/2021/05/31/%E7%AE%A1%E9%81%93/" title="发布于 2021-05-31 09:32">管道</a>
+            
         </div>
+    </div>
     
-        <div class="article">
-            <div class="article-title">
-                <a href="/2021/05/31/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：进程间通信-消息队列
-                    <a href="/2021/05/31/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2021-05-31
-                </span>
-                
-                    <span id="/2021/05/31/消息队列/" class="leancloud_visitors" data-flag-title="消息队列">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/05/31/消息队列/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
+    <div class="article-comments">
+        <div class="comments-title">
+            评论列表
         </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2021/05/31/%E4%BF%A1%E5%8F%B7/">信号</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：进程间通信-信号
-                    <a href="/2021/05/31/%E4%BF%A1%E5%8F%B7/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2021-05-31
-                </span>
-                
-                    <span id="/2021/05/31/信号/" class="leancloud_visitors" data-flag-title="信号">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/05/31/信号/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
+        <div class="comments-content">
         </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2021/05/31/%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93/">有名管道</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：进程间通信-有名管道
-                    <a href="/2021/05/31/%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2021-05-31
-                </span>
-                
-                    <span id="/2021/05/31/有名管道/" class="leancloud_visitors" data-flag-title="有名管道">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/05/31/有名管道/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
-        </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2021/05/31/%E7%AE%A1%E9%81%93/">管道</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：进程间通信-管道
-                    <a href="/2021/05/31/%E7%AE%A1%E9%81%93/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2021-05-31
-                </span>
-                
-                    <span id="/2021/05/31/管道/" class="leancloud_visitors" data-flag-title="管道">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/05/31/管道/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
-        </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2021/05/31/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/">进程间通信</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：进程间通信
-                    <a href="/2021/05/31/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2021-05-31
-                </span>
-                
-                    <span id="/2021/05/31/进程间通信/" class="leancloud_visitors" data-flag-title="进程间通信">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/05/31/进程间通信/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
-        </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2021/04/28/%E7%AD%89%E5%BE%85%E5%AD%90%E8%BF%9B%E7%A8%8B%E7%BB%88%E6%AD%A2/">等待子进程终止</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：等待子进程终止
-                    <a href="/2021/04/28/%E7%AD%89%E5%BE%85%E5%AD%90%E8%BF%9B%E7%A8%8B%E7%BB%88%E6%AD%A2/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2021-04-28
-                </span>
-                
-                    <span id="/2021/04/28/等待子进程终止/" class="leancloud_visitors" data-flag-title="等待子进程终止">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/04/28/等待子进程终止/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
-        </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2021/04/28/%E7%BB%88%E6%AD%A2%E8%BF%9B%E7%A8%8B/">终止进程</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：终止进程
-                    <a href="/2021/04/28/%E7%BB%88%E6%AD%A2%E8%BF%9B%E7%A8%8B/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2021-04-28
-                </span>
-                
-                    <span id="/2021/04/28/终止进程/" class="leancloud_visitors" data-flag-title="终止进程">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/04/28/终止进程/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
-        </div>
-    
-        <div class="article">
-            <div class="article-title">
-                <a href="/2021/04/28/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
-                
-            </div>
-            <div class="article-abstract">
-                
-                    摘要：进程调度
-                    <a href="/2021/04/28/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">阅读全文</a>
-                
-            </div>
-            <div class="clear"></div>
-            <div class="article-info">
-                <span>
-                    <i class="iconfont icon-time"></i> 发表时间：2021-04-28
-                </span>
-                
-                    <span id="/2021/04/28/进程调度/" class="leancloud_visitors" data-flag-title="进程调度">
-                        <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                    </span>
-                
-                <span>
-                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/04/28/进程调度/"></span>
-                </span>
-            </div>
-            <div class="clear"></div>     
-        </div>
-    
-    
-        <div class="pagination-bottom">
-            <div class="pagination">
-                
-                    <a href="/page/2/">下一页</a>
-                
-            </div>
-        </div>
-    
+    </div>
+
 </div>
 
     </div>
