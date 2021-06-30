@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta name="referrer" content="origin">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>sqlite3</title>
+
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/LongCang.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Monda.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/NotoSansSC.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Playball.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/PTMono.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/RobotoSlab.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Rosario.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/UbuntuMono.css">
+
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/post.css">
+    
+        <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/normal.css">
+    
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/jquery-3.4.1.min.js"></script>
+
+<meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Carl������վ" type="application/atom+xml">
+</head>
+<body>
+    <a id="cover"></a>
+    <div id="header">
+    <div class="header">
+        <div class="vertical">
+            <div class="inner">
+                <h1 class="header-subtitle">sqlite3</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2021-06-30
+                        </span>
+                        
+                            <span id="/2021/06/30/sqlite3/" class="leancloud_visitors" data-flag-title="sqlite3">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2021/06/30/sqlite3/"></span>
+                        </span>  
+                    </p>                 
+                </div>
+            </div>
+        </div>
+        <canvas id="articleHeaderCanvas"></canvas>
+    </div>
+</div>
+    <div id="container">
+    <div id="content">
+        <div id="article">
+    <div class="toc"></div>
+    <div class="article-body">
+        <h1 id="sqlite3"><a href="#sqlite3" class="headerlink" title="sqlite3"></a>sqlite3</h1><p>最近工作中用到了数据库，具体使用是，打开数据库-&gt;进行数据库操作-&gt;关闭数据库</p>
+<h2 id="打开数据库"><a href="#打开数据库" class="headerlink" title="打开数据库"></a>打开数据库</h2><p>sqlite3有三个打开数据库的函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> sqlite3_open</span><br><span class="line">(</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *filename,   <span class="comment">/* Database filename (UTF-8) */</span></span><br><span class="line">    sqlite3 **ppDb          <span class="comment">/* OUT: SQLite db handle */</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> sqlite3_open16</span><br><span class="line">(</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">void</span> *filename,   <span class="comment">/* Database filename (UTF-16) */</span></span><br><span class="line">    sqlite3 **ppDb          <span class="comment">/* OUT: SQLite db handle */</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> sqlite3_open_v2</span><br><span class="line">(</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *filename,   <span class="comment">/* Database filename (UTF-8) */</span></span><br><span class="line">    sqlite3 **ppDb,         <span class="comment">/* OUT: SQLite db handle */</span></span><br><span class="line">    <span class="keyword">int</span> flags,              <span class="comment">/* Flags */</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *zVfs        <span class="comment">/* Name of VFS module to use */</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>其中sqlite3_open()和sqlite3_open16()都是可读可写打开数据库，如果数据库不存在，则创建数据库；它们的区别在于数据库名称的编码，前者是UTF-8，后者是UTF-16</p>
+<p>sqlite3_open_v2()则是sqlite3_open()的升级，它可以通过flags参数，指定打开数据库的模式</p>
+<h2 id="关闭数据库"><a href="#关闭数据库" class="headerlink" title="关闭数据库"></a>关闭数据库</h2><p>关闭数据库比较简单直接使用sqlite3_close(sqlite3 *db)就可以了，关于sqlite3_close_v2()我没有深入了解</p>
+<p>关于打开和关闭数据库，我在在项目中是这样使用的：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> result;</span><br><span class="line">sqlite3 *db;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (access(FILE, F_OK) != <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    result = sqlite3_open_v2(FILE, &amp;db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    result = sqlite3_open_v2(FILE, &amp;db, SQLITE_OPEN_READWRITE, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (result != SQLITE_OK)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;error:%s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">    sqlite3_close(db);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>判断数据库是否存在，如果不存在则创建，并以可读可写模式打开；如果存在则直接以可读可写模式打开(注：由于我有一个全局变量保存SQLite db handle所以没有直接关闭数据库)</p>
+<h2 id="执行SQLite语句"><a href="#执行SQLite语句" class="headerlink" title="执行SQLite语句"></a>执行SQLite语句</h2><p>执行SQL语句需要用到sqlite3_exec()函数，函数原型如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> sqlite3_exec</span><br><span class="line">(</span><br><span class="line">    sqlite3* pDB,        <span class="comment">/* sqlite3句柄 */</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>* sql,    <span class="comment">/* 被执行的 SQL 语句 */</span></span><br><span class="line">    <span class="keyword">int</span> (*callback)(<span class="keyword">void</span>*,<span class="keyword">int</span>,<span class="keyword">char</span>**,<span class="keyword">char</span>**),  <span class="comment">/* 执行/查询回调函数 */</span></span><br><span class="line">    <span class="keyword">void</span>* pvoid,    <span class="comment">/* 传递给回调函数的第一个参数 */</span></span><br><span class="line">    <span class="keyword">char</span>**errmsg    <span class="comment">/* 错误输出信息 */</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>sqlite3_exec()接口执行多条以”; “分隔的SQL语句。如果回调函数不为 NULL, 则它对每一个行查询结果都会调用该回调函数. 如果没有回调函数被指定, sqlite3_exec() 只是简单地忽略查询结果</p>
+<p>当在执行该SQL语句发生错误时, 执行将发生中断, 并且后面的语句也全部被忽略</p>
+<p>如果 errmsg 参数不为空任何错误信息将会被写进由 sqlite3_malloc() 得到的的内存空间中, 即 errmsg 指向的内存。为了避免内存泄漏, 应用程序应该在不需要该错误信息后立即调用 sqlite3_free() 释放该内存空间。如果 errmsg 参数不为 NULL, 并且没有错误发生, errmsg 被设置为 NULL</p>
+<p>例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span></span><br><span class="line">&#123;</span><br><span class="line">    result = sqlite3_exec(db, db_cmd_buf, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">&#125; <span class="keyword">while</span> (result == SQLITE_BUSY);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (result == SQLITE_OK)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;error:%s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>db_cmd_buf里放的就是我们需要执行的SQL语句</p>
+<h2 id="SQLite语句"><a href="#SQLite语句" class="headerlink" title="SQLite语句"></a>SQLite语句</h2><p>SQLite 是不区分大小写的，但也有一些命令是大小写敏感的，比如 GLOB 和 glob 在 SQLite 的语句中有不同的含义</p>
+<p>下面是在C/C++ 中传递给sqlite3_exec()函数的几类SQLite语句：</p>
+<h3 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h3><p>创建表的语法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE table_name</span><br><span class="line">(</span><br><span class="line">   column1 datatype  PRIMARY KEY(one or more columns),</span><br><span class="line">   column2 datatype,</span><br><span class="line">   column3 datatype,</span><br><span class="line">   .....</span><br><span class="line">   columnN datatype,</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>CREATE TABLE 是告诉数据库系统创建一个新表的关键字。CREATE TABLE 语句后跟着表的唯一的名称或标识</p>
+<h3 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h3><p>删除表的语法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DROP TABLE table_name;</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h3><p>添加数据语句有两种基本语法，如下所示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO TABLE_NAME [(column1, column2, column3,...columnN)] VALUES (value1, value2, value3,...valueN);</span><br><span class="line"></span><br><span class="line">INSERT INTO TABLE_NAME VALUES (value1,value2,value3,...valueN);</span><br></pre></td></tr></table></figure>
+
+<p>在这里，column1, column2,…columnN 是要插入数据的表中的列的名称。如果要为表中的所有列添加值，您也可以不需要在 SQLite 查询中指定列名称。但要确保值的顺序与列在表中的顺序一致</p>
+<h3 id="WHERE-AND-OR"><a href="#WHERE-AND-OR" class="headerlink" title="WHERE AND OR"></a>WHERE AND OR</h3><p>SQLite的 WHERE 子句用于指定从一个表或多个表中获取数据的条件。</p>
+<p>如果满足给定的条件，即为真（true）时，则从表中返回特定的值。您可以使用 WHERE 子句来过滤记录，只获取需要的记录。</p>
+<p>WHERE 子句不仅可用在 SELECT 语句中，它也可用在 UPDATE、DELETE 语句中，等等</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQLite 语句 WHERE [condition1] AND [condition2]...AND [conditionN];</span><br><span class="line">SQLite 语句 WHERE [condition1] OR [condition2]...OR [conditionN];</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h3><p>SQLite 的 DELETE 查询用于删除表中已有的记录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DELETE FROM table_name</span><br><span class="line"></span><br><span class="line">DELETE FROM table_name WHERE [condition];</span><br></pre></td></tr></table></figure>
+
+<h3 id="更新数据"><a href="#更新数据" class="headerlink" title="更新数据"></a>更新数据</h3><p>SQLite 的 UPDATE 查询用于修改表中已有的记录。可以使用带有 WHERE 子句的 UPDATE 查询来更新选定行，否则所有的行都会被更新。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UPDATE table_name SET column1 &#x3D; value1, column2 &#x3D; value2...., columnN &#x3D; valueN WHERE [condition];</span><br></pre></td></tr></table></figure>
+
+<h3 id="查找数据"><a href="#查找数据" class="headerlink" title="查找数据"></a>查找数据</h3><p>SQLite 的 SELECT 语句用于从 SQLite 数据库表中获取数据，以结果表的形式返回数据。这些结果表也被称为结果集。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT column1, column2, columnN FROM table_name;</span><br><span class="line"></span><br><span class="line">SELECT * FROM table_name;</span><br><span class="line"></span><br><span class="line">SELECT * FROM table_name WHERE [condition];</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>column1, column2…是表的字段，他们的值即是要获取的</li>
+<li>*代表所有字段</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>此次完成的工作是完成Traffic service：从modem获取lte流量，创建定时器计算每天每月每年的数据，并保存到数据库中</p>
+<p>数据库部分，主要完成一个traffic_db_new_command_buffer()函数来根据不同的需求返回不同的语句，然后调用sqlite3_exec()函数执行，最后在回调函数中查询结果</p>
+<p>贴出traffic_db_new_command_buffer()函数部分代码仅供参考：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">traffic_db_new_command_buffer</span><span class="params">(COMMAND_TYPE traffic_cmd_type, TABLE_TYPE table, ITEM_INFO *traffic_info, <span class="keyword">char</span> *select_tag, <span class="keyword">char</span> *where_tag)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *db_cmd_buff;</span><br><span class="line">    <span class="keyword">size_t</span> cmd_buff_sizes = <span class="number">512</span>;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    TABLE_INFO *ptaffic_table_info;</span><br><span class="line">    db_cmd_buff = <span class="built_in">malloc</span>(cmd_buff_sizes + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (db_cmd_buff != <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">switch</span> (traffic_cmd_type)</span><br><span class="line">        &#123;</span><br><span class="line">        <span class="keyword">case</span> SELECT_COUNT_FROM:</span><br><span class="line">            <span class="built_in">sprintf</span>(db_cmd_buff, <span class="string">&quot;SELECT count(*) FROM %s&quot;</span>, ptaffic_table_info-&gt;table_name);</span><br><span class="line">            <span class="keyword">return</span> db_cmd_buff;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> ELECT_COUNT_FROM_WHERE:</span><br><span class="line">            <span class="built_in">sprintf</span>(db_cmd_buff, <span class="string">&quot;SELECT count(*) FROM %s WHERE %s;&quot;</span>, ptaffic_table_info-&gt;table_name, where_tag);</span><br><span class="line">            <span class="keyword">return</span> db_cmd_buff;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> SELECT_FROM_WHERE:</span><br><span class="line">            <span class="built_in">sprintf</span>(db_cmd_buff, <span class="string">&quot;SELECT * FROM %s WHERE %s;&quot;</span>, ptaffic_table_info-&gt;table_name, where_tag);</span><br><span class="line">            <span class="keyword">return</span> db_cmd_buff;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> SELECT_FROM:</span><br><span class="line">            <span class="built_in">sprintf</span>(db_cmd_buff, <span class="string">&quot;SELECT * FROM %s ;&quot;</span>, ptaffic_table_info-&gt;table_name);</span><br><span class="line">            <span class="keyword">return</span> db_cmd_buff;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> DELETE_FROM:</span><br><span class="line">            <span class="built_in">sprintf</span>(db_cmd_buff, <span class="string">&quot;DELETE from %s;&quot;</span>, ptaffic_table_info-&gt;table_name);</span><br><span class="line">            <span class="keyword">return</span> db_cmd_buff;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> DELETE_FROM_WHERE:</span><br><span class="line">            <span class="built_in">sprintf</span>(db_cmd_buff, <span class="string">&quot;DELETE from %s WHERE %s;&quot;</span>, ptaffic_table_info-&gt;table_name, where_tag);</span><br><span class="line">            <span class="keyword">return</span> db_cmd_buff;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">free</span>(db_cmd_buff);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        <p class="suffix-end">__END__</p>
+        <div class="suffix-box">
+            <div class="suffix-box-left">
+                <img src="https://cdn.jsdelivr.net/gh/Carl-5535/images@master/head/carl.jpg" alt="Carl Chen">
+            </div>
+            <div class="suffix-box-right">
+                <span class="suffix-box-title">文章作者</span>：Carl Chen
+                <br>
+                <span class="suffix-box-title">文章出处</span>：<a href="/2021/06/30/sqlite3/" target="_blank">sqlite3</a>
+                <br>
+                <span class="suffix-box-title">作者签名</span>：不想秃头的Carl.
+                <br>
+                <span class="suffix-box-title">关于主题</span>：<a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+                <br>
+                <span class="suffix-box-title">版权声明</span>：文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+                <br>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+    <div class="article-footer">
+        
+            <div class="category">
+                分类：
+                
+                    <a href="/category/%E5%B7%A5%E4%BD%9C%E6%80%BB%E7%BB%93/">工作总结</a>
+                
+            </div>
+        
+        
+            <div class="tag">
+                标签：
+                
+                    <a href="/tags/%E5%B7%A5%E4%BD%9C%E6%80%BB%E7%BB%93/">工作总结</a>
+                
+            </div>
+        
+        <div class="article-prev-next">
+            
+            
+                <a href="/2021/06/30/%E5%A5%97%E6%8E%A5%E5%AD%972/" class="next-prefix">» </a> 下一篇：    <a href="/2021/06/30/%E5%A5%97%E6%8E%A5%E5%AD%972/" title="发布于 2021-06-30 09:09">套接字2</a>
+            
+        </div>
+    </div>
+    
+    <div class="article-comments">
+        <div class="comments-title">
+            评论列表
+        </div>
+        <div class="comments-content">
+        </div>
+    </div>
+
+</div>
+
+    </div>
+</div>
+    <div id="footer"></div>
+    <div id="sidebar">
+    <div class="menu-wrap" style="display:none;">
+        <nav class="menu">
+            <div class="menu-introduce"> 
+                <div class="introduce-avatar"></div> 
+                <div class="introduce-info"> 
+                    <div class="introduce-user"><span></span></div>        
+                </div> 
+            </div> 
+            <div class="menu-list">
+                <ul></ul> 
+            </div> 
+            <div class="menu-link"></div> 
+        </nav>
+        <button class="menu-button-close"></button>
+        <div class="morph-shape" id="morph-shape" data-morph-open="M-7.312,0H15c0,0,66,113.339,66,399.5C81,664.006,15,800,15,800H-7.312V0z;M-7.312,0H100c0,0,0,113.839,0,400c0,264.506,0,400,0,400H-7.312V0z">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 800" preserveAspectRatio="none">
+                <path d="M-7.312,0H0c0,0,0,113.839,0,400c0,264.506,0,400,0,400h-7.312V0z"/>
+            </svg>
+        </div>
+    </div>
+    <button class="menu-button-open">MENU</button>
+    <div class="menu-cover"></div>
+</div>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/search.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/iscroll.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/instantsearch.min.js"></script>
+<div class="search-window">
+    <div class="search-content">
+        <div class="search-content-icon">
+            <i class="iconfont icon-search"></i>
+        </div>
+        <div id="search-input" class="search-input"></div>
+    </div>
+
+    <div class="search-scroll">
+        <div class="search-result">
+            <div id="search-stats" class="search-stats"></div>
+            <div id="search-hits"></div>
+            <div id="search-pagination" class="search-pagination"></div>
+        </div>
+    </div>
+
+    <span class="search-close-icon">
+        <i class="iconfont icon-close"></i>
+    </span>
+</div>
+    <div id="tools">
+    <div class="progressbar-top"></div>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/APlayer.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/APlayer.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/Meting.min.js"></script>
+    <meting-js id="3778678" lrcshow="false" server="netease" type="playlist" fixed="true" autoplay="false" loop="all" order="random" preload="auto" volume="0.67" mutex="true"></meting-js>
+    <div class="wrap-right"></div>
+    <div class="loading"></div>
+</div>
+    <script>
+    window.config = {
+        GitHubUserName     : 'first19326',
+        GitHubRepositories : 'Hexo-LiveForCode',
+
+        BlogUser      : 'Carl Chen',
+        BlogAvatar    : 'https://cdn.jsdelivr.net/gh/Carl-5535/images@master/head/carl.jpg',
+        BlogStartDate : '2020-11-08',
+
+        WebsiteTitleBlur         : '(◍´꒳`◍) Hi, Live For Code',
+        WebsiteTitleBlurTimeOut  : 500,
+        WebsiteTitleFocus        : '(*´∇｀*) 欢迎回来!',
+        WebsiteTitleFocusTimeOut : 1000,
+        WebsiteFavicon           : 'https://cdn.jsdelivr.net/gh/Carl-5535/images@master/head/ harmonica.png',
+
+        ProgressBar: {
+            id       : 'topProgressBar',
+            color    : '#77B6FF',
+            height   : '2px',
+            duration : 0.2
+        },
+
+        Loading: {
+            rebound: {
+                tension  : 16,
+                friction : 5
+            },
+            spinner: {
+                id     : 'spinner',
+                radius : 90,
+                sides  : 3,
+                depth  : 4,
+                colors : {
+                    background : '#F0F0F0',
+                    stroke     : '#272633',
+                    base       : '',
+                    child      : '#272633'
+                },
+                alwaysForward : true,
+                restAt        : 0.5,
+                renderBase    : false
+            }
+        },
+
+        HomeHeaderAnimationRendered : true,
+        HomeHeaderAnimation         : {
+            radius      : 15,
+            density     : 0.2,
+            color       : 'rgba(255, 255, 255, .2)',
+            clearOffset : 0.3
+        },
+
+        ArticleHeaderAnimationRendered : false,
+        ArticleHeaderAnimation         : {
+            triW                  : 14,
+            triH                  : 20,
+            neighbours            : [
+                
+                    'side',
+                
+                    'top',
+                
+                    'bottom',
+                
+            ],
+            speedTrailAppear      : 0.1,
+            speedTrailDisappear   : 0.1,
+            speedTriOpen          : 1,
+            trailMaxLength        : 30,
+            trailIntervalCreation : 100,
+            delayBeforeDisappear  : 2,
+            colors                : [
+                
+                    '#96EDA6',
+                
+                    '#5BC6A9',
+                
+                    '#38668C',
+                
+                    '#374D84',
+                
+                    '#BED5CB',
+                
+                    '#62ADC6',
+                
+                    '#8EE5DE',
+                
+                    '#304E7B',
+                
+            ]
+        },
+
+        BackAnimationRendered          : true,
+        IEBrowserBackAnimationRendered : false,
+        BackAnimation                  : {
+            colorSaturation  : '60%',
+            colorBrightness  : '50%',
+            colorAlpha       : 0.5,
+            colorCycleSpeed  : 5,
+            verticalPosition : 'random',
+            horizontalSpeed  : 200,
+            ribbonCount      : 3,
+            strokeSize       : 0,
+            parallaxAmount   : -0.2,
+            animateSections  : true
+        },
+
+        HomeHeaderImage : [
+            
+                'https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/header/home.jpg',
+            
+        ],
+        HomeBannerText  : '代码大部分时间是给人看的，只是偶尔运行一下',
+
+        ArticleHeaderImage : [
+            
+                'https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/header/article.jpg',
+            
+        ],
+
+        OtherBannerText  : '',
+
+        MenuList : [
+            
+                {
+                    name   : '首页',
+                    href   : '/',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '标签',
+                    href   : '/tag',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '分类',
+                    href   : '/category',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '归档',
+                    href   : '/archive',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '关于',
+                    href   : '/about',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '搜索',
+                    href   : '',    
+                    target : '',
+                    class  : 'search'
+                },
+            
+                {
+                    name   : '留言板',
+                    href   : '/comment',    
+                    target : '',
+                    class  : ''
+                },
+            
+                {
+                    name   : '友情链接',
+                    href   : '/friend',    
+                    target : '',
+                    class  : ''
+                },
+            
+        ],
+        MenuLink : [
+            
+                {
+                    icon : 'icon-weibo', 
+                    url  : ''
+                },
+            
+                {
+                    icon : 'icon-wechat', 
+                    url  : ''
+                },
+            
+                {
+                    icon : 'icon-qq', 
+                    url  : ''
+                },
+            
+                {
+                    icon : 'icon-github', 
+                    url  : 'https://github.com/carl-5535'
+                },
+            
+        ],
+
+        FooterStyle : 2,
+        BottomText  : {
+            icon    : 'like-fill',
+            left    : '人生若只如初见',
+            right   : '何事秋风悲画扇'
+        },
+        ThemeInfo   : false,
+
+        ConsoleList : [
+            
+                [
+                    
+                        'Based on cnblogs theme SimpleMemory.',
+                    
+                        '',
+                    
+                ],
+            
+                [
+                    
+                        'SimpleMemory Author:',
+                    
+                        'BNDong',
+                    
+                ],
+            
+                [
+                    
+                        'Theme:',
+                    
+                        'LiveForCode',
+                    
+                ],
+            
+        ],
+
+        FontIconExtend : "",
+
+        Donate : {
+            paypal  : '',
+            bitcoin : '',
+            alipay  : 'https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/donate/alipay.png',
+            wechat  : 'https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/donate/wechat.png'
+        },
+
+        Code : {
+            style : 'normal'
+        },  
+
+        Search : {
+            applicationID : 'XMCRUTQ6TF',
+            apiKey        : 'd163ebeca12b61ad7721462381cea6a9',
+            indexName     : 'BLOG',
+            hits          : {
+                page : 10
+            },
+            labels        : {
+                placeholder : '搜索',
+                empty       : '未发现与 「${query}」 相关的内容',
+                stats       : '${hits} 条相关条目，使用了 ${time} 毫秒',
+            }
+        }, 
+
+        Valine : {
+            switch         : true,
+            el             : '.comments-content',
+            appId          : 'OVvCeGMH5XNm42b1wuU52HK0-gzGzoHsz',
+            appKey         : 'TltgUJqHRaoztnKrsy4SeYTW',
+            placeholder    : '你是我一生只会遇见一次的惊喜...',
+            avatar         : 'mm',
+            meta           : 'nick,mail,link',
+            requiredFields : 'nick,mail',
+            pageSize       : 5,
+            lang           : 'zh-cn',
+            visitor        : true,
+            enableQQ       : true
+        },
+
+        Tocbot : {
+            switch                : true,
+            tocSelector           : '.toc',
+            contentSelector       : '.article-body',
+            headingSelector       : 'h1, h2, h3, h4, h5',
+            headingsOffset        : 0,
+            scrollSmooth          : true,
+            scrollSmoothOffset    : -5,
+            positionFixedSelector : '.toc',
+            positionFixedClass    : 'toc-fixed',
+            fixedSidebarOffset    : '',
+        },
+
+        Require : {
+            baseUrl     : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/",
+            waitSeconds : 100
+        },
+
+        Meting : {
+            id       : "3778678", 
+            lrcshow  : false, 
+            server   : "netease", 
+            type     : "playlist", 
+            fixed    : true, 
+            autoplay : false, 
+            loop     : "all", 
+            order    : "random", 
+            preload  : "auto", 
+            volume   : 0.67, 
+            mutex    : true
+        },
+
+        LazyLoad : {
+            default : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/image/website/lazyload.svg"
+        },
+  
+
+        Style : {
+            aplayer          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/APlayer.css",
+            archive          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/archive.css",
+            donate           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/donate.css",
+            fancybox         : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/jquery.fancybox.css",
+            footer           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/footer.css",
+            iconfont         : "https://at.alicdn.com/t/font_1546312_l3yohatebw.css",
+            index            : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/index.css",
+            menuBubble       : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/menu-bubble.css",
+            page             : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/page.css",
+            post             : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/post.css",
+            search           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/search.css",
+            tocbot           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/tocbot.css",
+            normal           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/normal.css",
+            night            : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/night.css",
+            clipboard        : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/css/clipboard.css"
+        },
+
+        Script: {
+            aplayer          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/APlayer.min.js",
+            config           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/require.config.js",
+            index            : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/index.js",
+            instantSearch    : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/instantsearch.min.js",
+            jQuery           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/jquery-3.4.1.min.js",
+            loading          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/loading.js",
+            meting           : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/Meting.min.js",
+            iscroll          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/iscroll.js",
+            require          : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/require.min.js"
+        },
+
+        Font: {
+            LongCang   : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/LongCang.css",
+            Monda      : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Monda.css",
+            NotoSansSC : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/NotoSansSC.css",
+            Playball   : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Playball.css",
+            PTMono     : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/PTMono.css",
+            RobotoSlab : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/RobotoSlab.css",
+            Rosario    : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/Rosario.css",
+            UbuntuMono : "https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/font/UbuntuMono.css"
+        },
+
+        Suffix : {
+            about : '不想秃头的Carl.'
+        },
+            
+        Theme : {
+            url  : 'https://github.com/first19326/Hexo-LiveForCode',
+            name : 'Hexo - Live For Code'
+        }  
+    };
+</script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/first19326/hexo-liveforcode@master/static/js/index.js"></script>
+</body>
+</html>
